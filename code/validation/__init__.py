@@ -23,10 +23,13 @@ def calculate_logloss(actual, predicted, epsilon=1e-15):
     """
 
     prob_sum = 0.0
-    for i, vector in enumerate(predicted):
-        class_idx = actual[i]
-        prob = max(min(vector[class_idx],1-epsilon), epsilon)
-        prob_sum += np.log(prob)
+    clipped_preds = np.clip(predicted, epsilon, 1 - epsilon)
+
+    for i, vector in enumerate(clipped_preds):
+        true_class_idx = actual[i]
+        true_class_prob = vector[true_class_idx]
+        prob_sum += np.log(true_class_prob)
+        
     num_samples = len(actual)
     logloss = -(prob_sum/num_samples)
     return logloss
