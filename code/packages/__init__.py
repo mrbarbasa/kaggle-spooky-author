@@ -22,16 +22,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 
-import keras.backend as K
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-
-from keras.models import Model
-from keras.layers import Input, Dense, Flatten, Embedding, Dropout, SpatialDropout1D
-from keras.layers import Conv1D, MaxPooling1D, LSTM, GRU, Bidirectional, BatchNormalization
-from keras.layers import GlobalMaxPool1D, GlobalAveragePooling1D
-# from keras.layers import CuDNNLSTM, CuDNNGRU
-
-from preprocessing import compute_word_index, one_hot_encode_classes
-from preprocessing import load_glove_embeddings, construct_embedding_matrix
+from preprocessing import compute_word_index, load_glove_embeddings, construct_embedding_matrix
+from preprocessing import integer_encode_classes, one_hot_encode_classes
 from utils import load_data
 from validation import calculate_logloss

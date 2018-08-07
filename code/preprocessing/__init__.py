@@ -43,16 +43,6 @@ def compute_word_index(X_train_sequences,
     print('Found {} unique tokens.'.format(len(word_index)))
     return X_train_tokenized, X_test_tokenized, word_index
 
-def one_hot_encode_classes(y_train):
-    # Integer-encode the string labels so that class one
-    # is 0, class two is 1, and class three is 2, etc.
-    encoder = LabelEncoder()
-    y_train_integers = encoder.fit_transform(y_train)
-    # One-hot encode each integer into a vector such as [1 0 0]
-    y_train_encoded = to_categorical(y_train_integers)
-    print('Original class labels:', encoder.classes_)
-    return y_train_encoded
-
 def load_glove_embeddings(embeddings_path):
     # Load the GloVe embeddings into a dictionary
     # This maps words (as strings) to their vector representation (as float vectors)
@@ -98,3 +88,16 @@ def construct_embedding_matrix(word_index, embeddings_index, embedding_dim):
         # -- or --
         # remain as a random normalization of the mean and stdev of the GloVe embeddings
     return embedding_matrix, vocab_size
+
+def integer_encode_classes(y_train_raw):
+    # Integer-encode the string labels so that class one
+    # is 0, class two is 1, and class three is 2, etc.
+    encoder = LabelEncoder()
+    y_train_integers = encoder.fit_transform(y_train_raw)
+    print('Original class labels:', encoder.classes_)
+    return y_train_integers
+
+def one_hot_encode_classes(y_train_integers):
+    # One-hot encode each integer into a vector such as [1 0 0]
+    y_train_encoded = to_categorical(y_train_integers)
+    return y_train_encoded
