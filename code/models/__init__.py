@@ -1,3 +1,5 @@
+from contextlib import redirect_stdout
+
 import keras.backend as K
 from keras.callbacks import ModelCheckpoint, EarlyStopping, CSVLogger
 
@@ -69,5 +71,9 @@ def build_cnn_model(embedding_layer, max_sequence_length):
     model.compile(loss='categorical_crossentropy',
                   optimizer='adam',
                   metrics=['accuracy'])
-    # model.summary() # Todo: Save to file
     return model
+
+def save_model_summary(model, file_path):
+    with open(file_path, 'w') as f:
+        with redirect_stdout(f):
+            model.summary()
