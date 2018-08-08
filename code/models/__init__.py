@@ -1,5 +1,5 @@
 import keras.backend as K
-from keras.callbacks import ModelCheckpoint, EarlyStopping
+from keras.callbacks import ModelCheckpoint, EarlyStopping, CSVLogger
 
 from keras.models import Model
 from keras.layers import Input, Dense, Flatten, Embedding, Dropout, SpatialDropout1D
@@ -24,10 +24,13 @@ def build_embedding_layer(embedding_matrix,
                      weights=[embedding_matrix],
                      trainable=False)
 
-def build_model_callbacks(monitored_metric, mode, file_path):
+def build_model_callbacks(monitored_metric,
+                          mode,
+                          model_file_path,
+                          logger_file_path):
     # Evaluate the best model at the end of every epoch
     # and save only the best ones thus far
-    checkpointer = ModelCheckpoint(file_path,
+    checkpointer = ModelCheckpoint(model_file_path,
                                    monitor=monitored_metric,
                                    verbose=1,
                                    save_best_only=True,
@@ -43,7 +46,9 @@ def build_model_callbacks(monitored_metric, mode, file_path):
                             verbose=1,
                             mode=mode,
                             baseline=None)
-    return [checkpointer, stopper]
+    # Log all the metrics at the end of every epoch
+    logger = CSVLogger(logger_file_path, separator=',', append=False)
+    return [checkpointer, stopper, logger]
 
 def build_cnn_model(embedding_layer, max_sequence_length):
     input_layer = Input(shape=(max_sequence_length,), dtype='int32', name='input_layer')
