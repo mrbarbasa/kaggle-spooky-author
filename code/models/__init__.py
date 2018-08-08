@@ -52,8 +52,15 @@ def build_model_callbacks(monitored_metric,
     logger = CSVLogger(logger_file_path, separator=',', append=False)
     return [checkpointer, stopper, logger]
 
+def save_model_summary(model, file_path):
+    with open(file_path, 'w') as f:
+        with redirect_stdout(f):
+            model.summary()
+
 def build_cnn_model(embedding_layer, max_sequence_length):
-    input_layer = Input(shape=(max_sequence_length,), dtype='int32', name='input_layer')
+    input_layer = Input(shape=(max_sequence_length,),
+                        dtype='int32',
+                        name='input_layer')
     x = embedding_layer(input_layer)
     
     x = Flatten()(x)
@@ -73,7 +80,17 @@ def build_cnn_model(embedding_layer, max_sequence_length):
                   metrics=['accuracy'])
     return model
 
-def save_model_summary(model, file_path):
-    with open(file_path, 'w') as f:
-        with redirect_stdout(f):
-            model.summary()
+def build_gru_model(embedding_layer, max_sequence_length):
+    input_layer = Input(shape=(max_sequence_length,),
+                        dtype='int32',
+                        name='input_layer')
+    x = embedding_layer(input_layer)
+    
+    x = Flatten()(x)
+
+    output_layer = Dense(3, activation='softmax', name='output_layer')(x)
+    model = Model(inputs=input_layer, outputs=output_layer)
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='adam',
+                  metrics=['accuracy'])
+    return model
