@@ -1,3 +1,5 @@
+from contextlib import redirect_stdout
+
 import numpy as np
 
 from sklearn.metrics import classification_report, confusion_matrix
@@ -16,11 +18,23 @@ def display_classification_summary(y_valid, y_pred, labels, target_names):
     label_1 = target_names[0]
     label_2 = target_names[1]
     label_3 = target_names[2]
-    print('\n\t  ----- Classification Report -----')
+    print('            ----- Classification Report -----')
     print(report)
-    print('\t  ----- Confusion Matrix -----')
-    print(f'True Labels {label_1}\t{conf_matrix[0]}')
-    print(f'            {label_2}\t{conf_matrix[1]}')
-    print(f'            {label_3}\t{conf_matrix[2]}')
-    print(f'   \t\t  {label_1}  {label_2}  {label_3}')
-    print('   \t\tPredicted Labels')
+    print('            ----- Confusion Matrix -----')
+    print(f'True Labels  {label_1}  {conf_matrix[0]}')
+    print(f'             {label_2}  {conf_matrix[1]}')
+    print(f'             {label_3}  {conf_matrix[2]}')
+    print(f'                    {label_1}  {label_2}  {label_3}')
+    print('                  Predicted Labels')
+
+def save_classification_summary(y_valid,
+                                y_pred,
+                                labels,
+                                target_names,
+                                file_path):
+    with open(file_path, 'w') as f:
+        with redirect_stdout(f):
+            display_classification_summary(y_valid,
+                                           y_pred,
+                                           labels,
+                                           target_names)            
