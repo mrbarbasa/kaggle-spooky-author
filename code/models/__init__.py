@@ -1,13 +1,54 @@
 from contextlib import redirect_stdout
 
 import keras.backend as K
-from keras.callbacks import ModelCheckpoint, EarlyStopping, CSVLogger
+from keras.callbacks import Callback, ModelCheckpoint, EarlyStopping, CSVLogger
 
 from keras.models import Model
 from keras.layers import Input, Dense, Flatten, Embedding, Dropout, SpatialDropout1D
 from keras.layers import Conv1D, MaxPooling1D, LSTM, GRU, Bidirectional, BatchNormalization
 from keras.layers import GlobalMaxPool1D, GlobalAveragePooling1D
 # from keras.layers import CuDNNLSTM, CuDNNGRU
+
+class MetricProgress(Callback):
+    def __init__(self, metric, mode, nth_fold, n_splits, progress_file_path):
+        super(Callback, self).__init__()
+        self.metric = metric
+        self.mode = mode
+        self.nth_fold = nth_fold
+        self.n_splits = n_splits
+        self.progress_file_path = progress_file_path
+        self.best_score = float('inf')
+
+    def on_train_begin(self, logs={}):
+        with open(self.progress_file_path, 'a') as f:
+            with redirect_stdout(f):
+                print(f'\n----- Fold {self.nth_fold} of {self.n_splits} -----')
+
+    def on_epoch_end(self, epoch, logs={}):
+        nth_epoch = epoch + 1
+        score_improved = False
+        current_score = logs[self.metric]
+                
+        if self.mode == 'max':
+            # If the current metric score is higher than the best one,
+            # store the current one as the best
+            score_improved = current_score > self.best_score
+        else:
+            # We assume that the mode is `min`
+            # If the current metric score is lower than the best one,
+            # store the current one as the best
+            score_improved = current_score < self.best_score
+
+        with open(self.progress_file_path, 'a') as f:
+            with redirect_stdout(f):
+                if score_improved:
+                    print(f'Epoch {nth_epoch:05d}: {self.metric} improved '
+                          + f'from {self.best_score:.5f} to '
+                          + f'{current_score:.5f}; model saved')
+                    self.best_score = current_score
+                else:
+                    print(f'Epoch {nth_epoch:05d}: {self.metric} did not '
+                          + f'improve from {self.best_score:.5f}')
 
 def build_embedding_layer(embedding_matrix, 
                           vocab_size, 
@@ -28,13 +69,22 @@ def build_embedding_layer(embedding_matrix,
 
 def build_model_callbacks(monitored_metric,
                           mode,
+                          progress_file_path,
                           model_file_path,
-                          logger_file_path):
+                          logger_file_path,
+                          nth_fold,
+                          n_splits):
+    # Record model improvement progress based on the monitored metric
+    metric_progress = MetricProgress(monitored_metric,
+                                     mode, 
+                                     nth_fold, 
+                                     n_splits,
+                                     progress_file_path)
     # Evaluate the best model at the end of every epoch
     # and save only the best ones thus far
     checkpointer = ModelCheckpoint(model_file_path,
                                    monitor=monitored_metric,
-                                   verbose=1,
+                                   verbose=0,
                                    save_best_only=True,
                                    save_weights_only=False,
                                    mode=mode,
@@ -50,7 +100,7 @@ def build_model_callbacks(monitored_metric,
                             baseline=None)
     # Log all the metrics at the end of every epoch
     logger = CSVLogger(logger_file_path, separator=',', append=False)
-    return [checkpointer, stopper, logger]
+    return [metric_progress, checkpointer, stopper, logger]
 
 def save_model_summary(model, file_path):
     with open(file_path, 'w') as f:
