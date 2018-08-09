@@ -1,3 +1,5 @@
+from time import time
+from datetime import timedelta
 from contextlib import redirect_stdout
 
 import keras.backend as K
@@ -20,15 +22,29 @@ class MetricProgress(Callback):
         self.best_score = float('inf')
 
     def on_train_begin(self, logs={}):
+        self.fold_start = time()
         with open(self.progress_file_path, 'a') as f:
             with redirect_stdout(f):
-                print(f'\n----- Fold {self.nth_fold} of {self.n_splits} -----')
+                print(f'----- Fold {self.nth_fold} of {self.n_splits} -----')
+
+    def on_train_end(self, logs={}):
+        fold_elapsed = round(time() - self.fold_start)
+        fold_elapsed_str = str(timedelta(seconds=fold_elapsed))
+        with open(self.progress_file_path, 'a') as f:
+            with redirect_stdout(f):
+                print(f'Fold {self.nth_fold} training runtime: '
+                      f'{fold_elapsed_str}\n')
+
+    def on_epoch_begin(self, epoch, logs={}):
+        self.epoch_start = time()
 
     def on_epoch_end(self, epoch, logs={}):
         nth_epoch = epoch + 1
         score_improved = False
+        epoch_elapsed = round(time() - self.epoch_start)
+        epoch_elapsed_str = str(timedelta(seconds=epoch_elapsed))
         current_score = logs[self.metric]
-                
+
         if self.mode == 'max':
             # If the current metric score is higher than the best one,
             # store the current one as the best
@@ -43,12 +59,12 @@ class MetricProgress(Callback):
             with redirect_stdout(f):
                 if score_improved:
                     print(f'Epoch {nth_epoch:05d}: {self.metric} improved '
-                          + f'from {self.best_score:.5f} to '
-                          + f'{current_score:.5f}; model saved')
+                          f'from {self.best_score:.5f} to {current_score:.5f}; '
+                          f'runtime {epoch_elapsed_str}; model saved')
                     self.best_score = current_score
                 else:
-                    print(f'Epoch {nth_epoch:05d}: {self.metric} did not '
-                          + f'improve from {self.best_score:.5f}')
+                    print(f'Epoch {nth_epoch:05d}: {self.metric} did not improve '
+                          f'from {self.best_score:.5f}; runtime {epoch_elapsed_str}')
 
 def build_embedding_layer(embedding_matrix, 
                           vocab_size, 
