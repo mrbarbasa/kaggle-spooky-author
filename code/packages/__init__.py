@@ -5,6 +5,7 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 
+from time import time
 from tqdm import tqdm
 from scipy.stats import uniform
 from collections import Counter
@@ -25,6 +26,6 @@ from sklearn.linear_model import LogisticRegression
 from preprocessing import compute_word_index, load_glove_embeddings, construct_embedding_matrix
 from preprocessing import integer_encode_classes, one_hot_encode_classes
 from stats import display_classification_summary, save_classification_summary
-from utils import load_data
+from utils import load_data, save_line_to_file, format_time_str, get_time_elapsed
 from validation import calculate_logloss
 from visualization import display_metric_vs_epochs_plot

@@ -1,5 +1,4 @@
 from time import time
-from datetime import timedelta
 from contextlib import redirect_stdout
 
 import keras.backend as K
@@ -10,6 +9,8 @@ from keras.layers import Input, Dense, Flatten, Embedding, Dropout, SpatialDropo
 from keras.layers import Conv1D, MaxPooling1D, LSTM, GRU, Bidirectional, BatchNormalization
 from keras.layers import GlobalMaxPool1D, GlobalAveragePooling1D
 # from keras.layers import CuDNNLSTM, CuDNNGRU
+
+from utils import save_line_to_file, get_time_elapsed
 
 class MetricProgress(Callback):
     def __init__(self, metric, mode, nth_fold, n_splits, progress_file_path):
@@ -23,17 +24,13 @@ class MetricProgress(Callback):
 
     def on_train_begin(self, logs={}):
         self.fold_start = time()
-        with open(self.progress_file_path, 'a') as f:
-            with redirect_stdout(f):
-                print(f'----- Fold {self.nth_fold} of {self.n_splits} -----')
+        line = f'----- Fold {self.nth_fold} of {self.n_splits} -----'
+        save_line_to_file(line, self.progress_file_path, 'a')
 
     def on_train_end(self, logs={}):
-        fold_elapsed = round(time() - self.fold_start)
-        fold_elapsed_str = str(timedelta(seconds=fold_elapsed))
-        with open(self.progress_file_path, 'a') as f:
-            with redirect_stdout(f):
-                print(f'Fold {self.nth_fold} training runtime: '
-                      f'{fold_elapsed_str}\n')
+        _, fold_elapsed_str = get_time_elapsed(self.fold_start)
+        line = f'Fold {self.nth_fold} training runtime: {fold_elapsed_str}\n'
+        save_line_to_file(line, self.progress_file_path, 'a')
 
     def on_epoch_begin(self, epoch, logs={}):
         self.epoch_start = time()
@@ -41,8 +38,8 @@ class MetricProgress(Callback):
     def on_epoch_end(self, epoch, logs={}):
         nth_epoch = epoch + 1
         score_improved = False
-        epoch_elapsed = round(time() - self.epoch_start)
-        epoch_elapsed_str = str(timedelta(seconds=epoch_elapsed))
+        line = None
+        _, epoch_elapsed_str = get_time_elapsed(self.epoch_start)
         current_score = logs[self.metric]
 
         if self.mode == 'max':
@@ -55,16 +52,15 @@ class MetricProgress(Callback):
             # store the current one as the best
             score_improved = current_score < self.best_score
 
-        with open(self.progress_file_path, 'a') as f:
-            with redirect_stdout(f):
-                if score_improved:
-                    print(f'Epoch {nth_epoch:05d}: {self.metric} improved '
-                          f'from {self.best_score:.5f} to {current_score:.5f}; '
-                          f'runtime {epoch_elapsed_str}; model saved')
-                    self.best_score = current_score
-                else:
-                    print(f'Epoch {nth_epoch:05d}: {self.metric} did not improve '
-                          f'from {self.best_score:.5f}; runtime {epoch_elapsed_str}')
+        if score_improved:
+            line = (f'Epoch {nth_epoch:05d}: {self.metric} improved '
+                    f'from {self.best_score:.5f} to {current_score:.5f}; '
+                    f'runtime {epoch_elapsed_str}; model saved')
+            self.best_score = current_score
+        else:
+            line = (f'Epoch {nth_epoch:05d}: {self.metric} did not improve '
+                    f'from {self.best_score:.5f}; runtime {epoch_elapsed_str}')
+        save_line_to_file(line, self.progress_file_path, 'a')
 
 def build_embedding_layer(embedding_matrix, 
                           vocab_size, 
