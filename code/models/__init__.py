@@ -53,12 +53,12 @@ class MetricProgress(Callback):
             score_improved = current_score < self.best_score
 
         if score_improved:
-            line = (f'Epoch {nth_epoch:05d}: {self.metric} improved '
+            line = (f'Epoch {nth_epoch:03d}: {self.metric} improved '
                     f'from {self.best_score:.5f} to {current_score:.5f}; '
                     f'runtime {epoch_elapsed_str}; model saved')
             self.best_score = current_score
         else:
-            line = (f'Epoch {nth_epoch:05d}: {self.metric} did not improve '
+            line = (f'Epoch {nth_epoch:03d}: {self.metric} did not improve '
                     f'from {self.best_score:.5f}; runtime {epoch_elapsed_str}')
         save_line_to_file(line, self.progress_file_path, 'a')
 
