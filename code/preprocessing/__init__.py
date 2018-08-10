@@ -87,28 +87,36 @@ def construct_embedding_matrix(word_index, embeddings_index, embedding_dim):
     # embedding_mean, embedding_std = all_embeddings.mean(), all_embeddings.std()
     # print(embedding_mean, embedding_std)
     
-    # Compute the embedding matrix using our training words `word_index` and
-    # the pre-trained embeddings `embeddings_index`
+    # Compute the embedding matrix using our training words `word_index`
+    # and the pre-trained embeddings `embeddings_index`
     vocab_size = len(word_index) + 1
     embedding_matrix = np.zeros((vocab_size, embedding_dim))
 
-    # Create an embedding matrix with random initialization for words that aren't in GloVe,
-    #   using the mean and stdev of the GloVe embeddings
+    # Create an embedding matrix with random initialization for words
+    # that aren't in the pre-trained embeddings using the mean and stdev
+    # of the pre-trainedembeddings
     # embedding_matrix = np.random.normal(loc=embedding_mean,
     #                                     scale=embedding_std,
     #                                     size=(vocab_size, EMBEDDING_DIM))
 
-    # Loop over each of the first `MAX_FEATURES` words of the `word_index` built from
-    # the dataset and retrieve its embedding vector from the GloVe `embeddings_index`
+    # Keep track of the number of words not found in the pre-trained embeddings
+    num_unknown = 0
+    # Loop over each of the first `MAX_FEATURES` words of the `word_index`
+    # built from the dataset and retrieve its embedding vector from the
+    # pre-trained `embeddings_index`
     for word, i in word_index.items():
         embedding_vector = embeddings_index.get(word)
+        # A word in our corpus has been found in the pre-trained embeddings
         if embedding_vector is not None:
             embedding_matrix[i] = embedding_vector
-        # Words not found in the `embeddings_index` will have their vectors in `embedding_matrix`
-        # remain as all zeros
-        # -- or --
-        # remain as a random normalization of the mean and stdev of the GloVe embeddings
-    return embedding_matrix, vocab_size
+        else:
+            # Words not found in the `embeddings_index` will have their
+            # vectors in `embedding_matrix` remain as all zeros
+            # -- or --
+            # remain as a random normalization of the mean and stdev of
+            # the embeddings
+            num_unknown += 1
+    return embedding_matrix, vocab_size, num_unknown
 
 def integer_encode_classes(y_train_raw):
     # Integer-encode the string labels so that class one
