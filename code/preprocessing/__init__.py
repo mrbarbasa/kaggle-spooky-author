@@ -78,26 +78,11 @@ def load_fasttext_embeddings(embeddings_path):
     print('Found {} word vectors.'.format(len(embeddings_index)))
     return embeddings_index
 
-def construct_embedding_matrix(word_index, embeddings_index, embedding_dim):
-    # Note: Only use this if creating a randomly initialized embedding matrix
-    # np.stack() --> 
-    #   array([[0.32, 0.7 ],
-    #          [0.42, 0.1 ]], dtype=float32)
-    # all_embeddings = np.stack(embeddings_index.values())
-    # embedding_mean, embedding_std = all_embeddings.mean(), all_embeddings.std()
-    # print(embedding_mean, embedding_std)
-    
+def construct_embedding_matrix(word_index, embeddings_index, embedding_dim):    
     # Compute the embedding matrix using our training words `word_index`
     # and the pre-trained embeddings `embeddings_index`
     vocab_size = len(word_index) + 1
     embedding_matrix = np.zeros((vocab_size, embedding_dim))
-
-    # Create an embedding matrix with random initialization for words
-    # that aren't in the pre-trained embeddings using the mean and stdev
-    # of the pre-trainedembeddings
-    # embedding_matrix = np.random.normal(loc=embedding_mean,
-    #                                     scale=embedding_std,
-    #                                     size=(vocab_size, EMBEDDING_DIM))
 
     # Keep track of the number of words not found in the pre-trained embeddings
     num_unknown = 0
@@ -112,9 +97,6 @@ def construct_embedding_matrix(word_index, embeddings_index, embedding_dim):
         else:
             # Words not found in the `embeddings_index` will have their
             # vectors in `embedding_matrix` remain as all zeros
-            # -- or --
-            # remain as a random normalization of the mean and stdev of
-            # the embeddings
             num_unknown += 1
     return embedding_matrix, vocab_size, num_unknown
 
