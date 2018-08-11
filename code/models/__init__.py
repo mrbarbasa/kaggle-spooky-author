@@ -93,14 +93,14 @@ def build_model_callbacks(monitored_metric,
                                      n_splits,
                                      progress_file_path)
     # Evaluate the best model at the end of every epoch
-    # and save only the best ones thus far
-    checkpointer = ModelCheckpoint(model_file_path,
-                                   monitor=monitored_metric,
-                                   verbose=0,
-                                   save_best_only=True,
-                                   save_weights_only=False,
-                                   mode=mode,
-                                   period=1)
+    # and save only the best one thus far
+    # checkpointer = ModelCheckpoint(model_file_path,
+    #                                monitor=monitored_metric,
+    #                                verbose=0,
+    #                                save_best_only=True,
+    #                                save_weights_only=False,
+    #                                mode=mode,
+    #                                period=1)
     # Evaluate the metric at the end of every epoch
     # and stop training early if the metric has not
     # improved after `patience` epochs
@@ -112,7 +112,8 @@ def build_model_callbacks(monitored_metric,
                             baseline=None)
     # Log all the metrics at the end of every epoch
     logger = CSVLogger(logger_file_path, separator=',', append=False)
-    return [metric_progress, checkpointer, stopper, logger]
+    # return [metric_progress, checkpointer, stopper, logger]
+    return [metric_progress, stopper, logger]
 
 def save_model_summary(model, file_path):
     with open(file_path, 'w') as f:
