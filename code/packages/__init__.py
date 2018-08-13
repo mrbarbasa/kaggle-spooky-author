@@ -25,8 +25,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 
 from preprocessing import compute_word_index, construct_embedding_matrix
-from preprocessing import load_glove_embeddings, load_fasttext_embeddings
-from preprocessing import integer_encode_classes, one_hot_encode_classes
+from preprocessing import load_embeddings, integer_encode_classes, one_hot_encode_classes
 from stats import display_classification_summary, save_classification_summary
 from utils import load_data, save_line_to_file, format_time_str, get_time_elapsed
 from validation import calculate_logloss
