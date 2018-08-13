@@ -1,5 +1,6 @@
 # Project-specific files
-input/
+input/**/*
+!input/embeddings/.gitkeep
 output/**/models/*.hdf5
 
 # Byte-compiled / optimized / DLL files
