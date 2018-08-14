@@ -40,6 +40,9 @@ def compute_word_index(X_train_sequences,
     # Recover the computed word index, which appears as 
     # {'necessary': 1234, ...}
     word_index = tokenizer.word_index
+    # Note that despite the `num_words` set in the Tokenizer, all unique
+    # tokens are stored here as if `num_words` were set to `None`.
+    # https://github.com/keras-team/keras/issues/7551
     print('Found {} unique tokens.'.format(len(word_index)))
     return X_train_tokenized, X_test_tokenized, word_index
 
