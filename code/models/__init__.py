@@ -67,7 +67,7 @@ def build_embedding_layer(embedding_matrix,
                           embedding_dim, 
                           max_sequence_length):
     # Input: Sequences of integers with input shape: (samples, indices)
-    # Output: A 3D tensor of shape (samples, sequence_length, embedding_dim)
+    # Output: A 3D tensor of shape (batch_size, sequence_length, embedding_dim)
     #
     # Layer is frozen so that its weights (the embedding vectors)
     # will not be updated during training.
@@ -119,22 +119,60 @@ def save_model_summary(model, file_path):
     with open(file_path, 'w') as f:
         with redirect_stdout(f):
             model.summary()
-
-def build_cnn_model(embedding_layer, max_sequence_length):
+    
+def build_cnn_model(embedding_layer, max_sequence_length, flatten=False):    
     input_layer = Input(shape=(max_sequence_length,),
                         dtype='int32',
                         name='input_layer')
     x = embedding_layer(input_layer)
+
+    # Architecture 1
+    # for i in range(1, 5):
+    #     x = Conv1D(300, 5, activation='relu', padding='same')(x)
+    #     x = Conv1D(300, 5, activation='relu', padding='same')(x) # May or may not add this
+    #     x = MaxPooling1D(5, padding='same')(x)
+    #     x = Dropout(0.1)(x) # May or may not add this
+        
+    # if flatten:
+    #     x = Flatten()(x)
+    #     x = Dense(300, activation='relu')(x)
+    # else:
+    #     x = Conv1D(300, 5, activation='relu', padding='same')(x)
+    #     x = Conv1D(300, 5, activation='relu', padding='same')(x) # May or may not add this
+    #     x = GlobalMaxPooling1D()(x)
     
-    x = Flatten()(x)
-    # x = Conv1D(128, 5, activation='relu')(x)
-    # x = MaxPooling1D(5)(x)
-    # x = Conv1D(128, 5, activation='relu')(x)
-    # x = MaxPooling1D(5)(x)
-    # x = Conv1D(128, 5, activation='relu')(x)
-    # x = MaxPooling1D(5)(x)
-    # x = Flatten()(x)
-    # x = Dense(128, activation='relu')(x)
+    # Architecture 2
+    # x = Conv1D(64, 3, activation='relu', padding='same')(x) # 32
+    # x = Conv1D(64, 3, activation='relu', padding='same')(x)
+    # x = MaxPooling1D(3, padding='same')(x)
+
+    # x = Conv1D(128, 3, activation='relu', padding='same')(x) # 64, flatten=False
+    # x = Conv1D(128, 3, activation='relu', padding='same')(x)
+    # x = GlobalAveragePooling1D()(x)
+    # x = Dropout(0.5)(x)
+    
+    # Architecture 3
+    # x = Conv1D(32, 3, activation='relu', padding='same')(x)
+    # x = Conv1D(32, 3, activation='relu', padding='same')(x)
+    # x = MaxPooling1D(2, padding='same')(x)
+    # x = Dropout(0.25)(x)
+
+    # x = Conv1D(64, 3, activation='relu', padding='same')(x) # 64
+    # x = Conv1D(64, 3, activation='relu', padding='same')(x)
+    # x = MaxPooling1D(2, padding='same')(x)
+    # x = Dropout(0.25)(x)
+    
+    # x = Flatten()(x) # flatten=True
+    # x = Dense(256, activation='relu')(x)
+    # x = Dropout(0.5)(x)
+    
+    # Architecture 4
+    x = Dropout(0.2)(x)
+    x = Conv1D(250, 3, activation='relu', padding='same')(x)
+    x = GlobalMaxPooling1D()(x)
+
+    x = Dense(250, activation='relu')(x)
+    x = Dropout(0.2)(x)
 
     output_layer = Dense(3, activation='softmax', name='output_layer')(x)
     model = Model(inputs=input_layer, outputs=output_layer)
