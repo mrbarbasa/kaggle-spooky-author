@@ -7,9 +7,9 @@ import keras.backend as K
 from keras.callbacks import Callback, ModelCheckpoint, EarlyStopping, CSVLogger
 
 from keras.models import Model
-from keras.layers import Input, Dense, Flatten, Embedding, Dropout, SpatialDropout1D
-from keras.layers import Conv1D, MaxPooling1D, Bidirectional
-from keras.layers import GlobalMaxPooling1D, GlobalAveragePooling1D
+from keras.layers import Input, Dense, Flatten, Embedding, Dropout
+from keras.layers import Conv1D, MaxPooling1D, Bidirectional, SpatialDropout1D
+from keras.layers import GlobalMaxPooling1D, GlobalAveragePooling1D, concatenate
 from keras.layers import CuDNNLSTM, CuDNNGRU
 
 from utils import save_line_to_file, get_time_elapsed
@@ -186,6 +186,41 @@ def build_random_cnn_model(embedding_layer, max_sequence_length):
     model = Model(inputs=input_layer, outputs=output_layer)
     model.compile(loss='categorical_crossentropy',
                   optimizer=optimizer,
+                  metrics=['accuracy'])
+    return model
+
+def build_random_rnn_model(embedding_layer, max_sequence_length):
+    input_layer = Input(shape=(max_sequence_length,),
+                        dtype='int32',
+                        name='input_layer')
+    x = embedding_layer(input_layer)
+    
+    use_lstm_model = bool(np.random.choice([True, False]))
+    RNNModel = CuDNNLSTM if use_lstm_model else CuDNNGRU
+    use_global_max_pooling_layer = bool(np.random.choice([True, False]))
+
+    units = int(np.random.choice([32, 64, 128, 256, 300]))
+    spatial_dropout_rate = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
+
+    use_extra_stack_value = float(np.random.uniform(0, 1))
+    one_stack_threshold = 0.7 # Use one RNN stack 70% of the time
+    num_rnn_stacks = 2 if use_extra_stack_value > one_stack_threshold else 1
+
+    for i in range(num_rnn_stacks):
+        x = SpatialDropout1D(spatial_dropout_rate)(x)
+        x = Bidirectional(RNNModel(units, return_sequences=True))(x)
+
+    if use_global_max_pooling_layer:
+        x = GlobalMaxPooling1D()(x)
+    else:
+        avg_pooling = GlobalAveragePooling1D()(x)
+        max_pooling = GlobalMaxPooling1D()(x)
+        x = concatenate([avg_pooling, max_pooling])
+
+    output_layer = Dense(3, activation='softmax', name='output_layer')(x)
+    model = Model(inputs=input_layer, outputs=output_layer)
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='adam',
                   metrics=['accuracy'])
     return model
 
