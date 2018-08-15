@@ -6,9 +6,9 @@ from keras.callbacks import Callback, ModelCheckpoint, EarlyStopping, CSVLogger
 
 from keras.models import Model
 from keras.layers import Input, Dense, Flatten, Embedding, Dropout, SpatialDropout1D
-from keras.layers import Conv1D, MaxPooling1D, LSTM, GRU, Bidirectional, BatchNormalization
+from keras.layers import Conv1D, MaxPooling1D, Bidirectional
 from keras.layers import GlobalMaxPooling1D, GlobalAveragePooling1D
-# from keras.layers import CuDNNLSTM, CuDNNGRU
+from keras.layers import CuDNNLSTM, CuDNNGRU
 
 from utils import save_line_to_file, get_time_elapsed
 
@@ -119,54 +119,81 @@ def save_model_summary(model, file_path):
     with open(file_path, 'w') as f:
         with redirect_stdout(f):
             model.summary()
-    
+
+def build_random_cnn_model(embedding_layer, max_sequence_length):    
+    input_layer = Input(shape=(max_sequence_length,),
+                        dtype='int32',
+                        name='input_layer')
+    x = embedding_layer(input_layer)
+
+    filters = np.random.choice([32, 64, 128, 256, 300])
+    kernel_size = np.random.choice([3, 5, 7, 9])
+    dropout_rate = np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5])
+    optimizer = np.random.choice(['adam', 'rmsprop'])
+
+    special_arch_value = np.random.uniform(0, 1)
+    normal_arch_threshold = 0.8 # Use normal architecture 80% of the time
+    use_special_arch = special_arch_value > normal_arch_threshold
+
+    if use_special_arch:
+        x = Dropout(dropout_rate)(x)
+        x = Conv1D(filters, kernel_size, activation='relu', padding='same')(x)
+        x = GlobalMaxPooling1D()(x)
+
+        x = Dense(filters, activation='relu')(x)
+        x = Dropout(dropout_rate)(x)
+
+    else:
+        num_conv_stacks = np.random.choice([1, 2, 3])
+        add_extra_conv_layer = np.random.choice([True, False])
+        add_dropout_layer = np.random.choice([True, False])
+
+        flatten = np.random.choice([True, False])
+        add_global_max_pooling_layer = np.random.choice([True, False])
+        add_final_dropout_layer = np.random.choice([True, False])
+
+        pool_size = np.random.choice([2, 3, 4, 5])
+        final_dropout_rate = np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5])
+
+        for i in range(num_conv_stacks):
+            x = Conv1D(filters, kernel_size, activation='relu', padding='same')(x)
+            if add_extra_conv_layer:
+                x = Conv1D(filters, kernel_size, activation='relu', padding='same')(x)
+
+            x = MaxPooling1D(pool_size, padding='same')(x)
+            if add_dropout_layer:
+                x = Dropout(dropout_rate)(x)
+            
+        if flatten:
+            x = Flatten()(x)
+            x = Dense(filters, activation='relu')(x)
+        else:
+            x = Conv1D(filters, kernel_size, activation='relu', padding='same')(x)
+            if add_extra_conv_layer:
+                x = Conv1D(filters, kernel_size, activation='relu', padding='same')(x)
+
+            if add_global_max_pooling_layer:
+                x = GlobalMaxPooling1D()(x)
+            else:
+                x = GlobalAveragePooling1D()(x)
+
+        if add_final_dropout_layer:
+            x = Dropout(final_dropout_rate)(x)
+
+    output_layer = Dense(3, activation='softmax', name='output_layer')(x)
+    model = Model(inputs=input_layer, outputs=output_layer)
+    model.compile(loss='categorical_crossentropy',
+                  optimizer=optimizer,
+                  metrics=['accuracy'])
+    return model
+
 def build_cnn_model(embedding_layer, max_sequence_length, flatten=False):    
     input_layer = Input(shape=(max_sequence_length,),
                         dtype='int32',
                         name='input_layer')
     x = embedding_layer(input_layer)
 
-    # Architecture 1
-    # for i in range(1, 5):
-    #     x = Conv1D(300, 5, activation='relu', padding='same')(x)
-    #     x = Conv1D(300, 5, activation='relu', padding='same')(x) # May or may not add this
-    #     x = MaxPooling1D(5, padding='same')(x)
-    #     x = Dropout(0.1)(x) # May or may not add this
-        
-    # if flatten:
-    #     x = Flatten()(x)
-    #     x = Dense(300, activation='relu')(x)
-    # else:
-    #     x = Conv1D(300, 5, activation='relu', padding='same')(x)
-    #     x = Conv1D(300, 5, activation='relu', padding='same')(x) # May or may not add this
-    #     x = GlobalMaxPooling1D()(x)
-    
-    # Architecture 2
-    # x = Conv1D(64, 3, activation='relu', padding='same')(x) # 32
-    # x = Conv1D(64, 3, activation='relu', padding='same')(x)
-    # x = MaxPooling1D(3, padding='same')(x)
-
-    # x = Conv1D(128, 3, activation='relu', padding='same')(x) # 64, flatten=False
-    # x = Conv1D(128, 3, activation='relu', padding='same')(x)
-    # x = GlobalAveragePooling1D()(x)
-    # x = Dropout(0.5)(x)
-    
-    # Architecture 3
-    # x = Conv1D(32, 3, activation='relu', padding='same')(x)
-    # x = Conv1D(32, 3, activation='relu', padding='same')(x)
-    # x = MaxPooling1D(2, padding='same')(x)
-    # x = Dropout(0.25)(x)
-
-    # x = Conv1D(64, 3, activation='relu', padding='same')(x) # 64
-    # x = Conv1D(64, 3, activation='relu', padding='same')(x)
-    # x = MaxPooling1D(2, padding='same')(x)
-    # x = Dropout(0.25)(x)
-    
-    # x = Flatten()(x) # flatten=True
-    # x = Dense(256, activation='relu')(x)
-    # x = Dropout(0.5)(x)
-    
-    # Architecture 4
+    # Todo: Choose the best CNN model from the random search run
     x = Dropout(0.2)(x)
     x = Conv1D(250, 3, activation='relu', padding='same')(x)
     x = GlobalMaxPooling1D()(x)
@@ -187,7 +214,10 @@ def build_gru_model(embedding_layer, max_sequence_length):
                         name='input_layer')
     x = embedding_layer(input_layer)
     
-    x = Flatten()(x)
+    # Todo: Choose the best GRU model from the random search run
+    x = SpatialDropout1D(0.2)(x)
+    x = Bidirectional(CuDNNGRU(128, return_sequences=True))(x)
+    x = GlobalMaxPooling1D()(x)
 
     output_layer = Dense(3, activation='softmax', name='output_layer')(x)
     model = Model(inputs=input_layer, outputs=output_layer)
