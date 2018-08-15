@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 
 from time import time
@@ -22,3 +23,11 @@ def get_time_elapsed(event_start):
     event_elapsed = time() - event_start
     event_elapsed_str = format_time_str(event_elapsed)
     return event_elapsed, event_elapsed_str
+
+def save_dictionary_to_file(dictionary, file_path):
+    with open(file_path, 'w') as f:
+        json.dump(dictionary, f, indent=4)
+
+def load_dictionary_from_file(file_path):
+    with open(file_path, 'r') as f:
+        return json.load(f)
