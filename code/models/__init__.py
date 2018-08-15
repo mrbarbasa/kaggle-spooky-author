@@ -1,3 +1,5 @@
+import numpy as np
+
 from time import time
 from contextlib import redirect_stdout
 
@@ -126,12 +128,12 @@ def build_random_cnn_model(embedding_layer, max_sequence_length):
                         name='input_layer')
     x = embedding_layer(input_layer)
 
-    filters = np.random.choice([32, 64, 128, 256, 300])
-    kernel_size = np.random.choice([3, 5, 7, 9])
-    dropout_rate = np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5])
-    optimizer = np.random.choice(['adam', 'rmsprop'])
+    filters = int(np.random.choice([32, 64, 128, 256, 300]))
+    kernel_size = int(np.random.choice([3, 5, 7, 9]))
+    dropout_rate = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
+    optimizer = str(np.random.choice(['adam', 'rmsprop']))
 
-    special_arch_value = np.random.uniform(0, 1)
+    special_arch_value = float(np.random.uniform(0, 1))
     normal_arch_threshold = 0.8 # Use normal architecture 80% of the time
     use_special_arch = special_arch_value > normal_arch_threshold
 
@@ -144,16 +146,16 @@ def build_random_cnn_model(embedding_layer, max_sequence_length):
         x = Dropout(dropout_rate)(x)
 
     else:
-        num_conv_stacks = np.random.choice([1, 2, 3])
-        add_extra_conv_layer = np.random.choice([True, False])
-        add_dropout_layer = np.random.choice([True, False])
+        num_conv_stacks = int(np.random.choice([1, 2, 3]))
+        add_extra_conv_layer = bool(np.random.choice([True, False]))
+        add_dropout_layer = bool(np.random.choice([True, False]))
 
-        flatten = np.random.choice([True, False])
-        add_global_max_pooling_layer = np.random.choice([True, False])
-        add_final_dropout_layer = np.random.choice([True, False])
+        flatten = bool(np.random.choice([True, False]))
+        use_global_max_pooling_layer = bool(np.random.choice([True, False]))
+        add_final_dropout_layer = bool(np.random.choice([True, False]))
 
-        pool_size = np.random.choice([2, 3, 4, 5])
-        final_dropout_rate = np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5])
+        pool_size = int(np.random.choice([2, 3, 4, 5]))
+        final_dropout_rate = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
 
         for i in range(num_conv_stacks):
             x = Conv1D(filters, kernel_size, activation='relu', padding='same')(x)
@@ -172,7 +174,7 @@ def build_random_cnn_model(embedding_layer, max_sequence_length):
             if add_extra_conv_layer:
                 x = Conv1D(filters, kernel_size, activation='relu', padding='same')(x)
 
-            if add_global_max_pooling_layer:
+            if use_global_max_pooling_layer:
                 x = GlobalMaxPooling1D()(x)
             else:
                 x = GlobalAveragePooling1D()(x)
@@ -208,13 +210,13 @@ def build_cnn_model(embedding_layer, max_sequence_length, flatten=False):
                   metrics=['accuracy'])
     return model
 
-def build_gru_model(embedding_layer, max_sequence_length):
+def build_rnn_model(embedding_layer, max_sequence_length):
     input_layer = Input(shape=(max_sequence_length,),
                         dtype='int32',
                         name='input_layer')
     x = embedding_layer(input_layer)
     
-    # Todo: Choose the best GRU model from the random search run
+    # Todo: Choose the best LSTM or GRU model from the random search run
     x = SpatialDropout1D(0.2)(x)
     x = Bidirectional(CuDNNGRU(128, return_sequences=True))(x)
     x = GlobalMaxPooling1D()(x)
