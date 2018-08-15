@@ -7,7 +7,7 @@ from keras.callbacks import Callback, ModelCheckpoint, EarlyStopping, CSVLogger
 from keras.models import Model
 from keras.layers import Input, Dense, Flatten, Embedding, Dropout, SpatialDropout1D
 from keras.layers import Conv1D, MaxPooling1D, LSTM, GRU, Bidirectional, BatchNormalization
-from keras.layers import GlobalMaxPool1D, GlobalAveragePooling1D
+from keras.layers import GlobalMaxPooling1D, GlobalAveragePooling1D
 # from keras.layers import CuDNNLSTM, CuDNNGRU
 
 from utils import save_line_to_file, get_time_elapsed
