@@ -18,7 +18,7 @@ def display_classification_summary(y_valid, y_pred, labels, target_names):
     label_1 = target_names[0]
     label_2 = target_names[1]
     label_3 = target_names[2]
-    print('            ----- Classification Report -----')
+    print('\n            ----- Classification Report -----')
     print(report)
     print('            ----- Confusion Matrix -----')
     print(f'True Labels  {label_1}  {conf_matrix[0]}')
@@ -31,8 +31,9 @@ def save_classification_summary(y_valid,
                                 y_pred,
                                 labels,
                                 target_names,
-                                file_path):
-    with open(file_path, 'w') as f:
+                                file_path,
+                                mode='w'):
+    with open(file_path, mode) as f:
         with redirect_stdout(f):
             display_classification_summary(y_valid,
                                            y_pred,

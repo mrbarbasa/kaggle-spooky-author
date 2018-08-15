@@ -26,12 +26,12 @@ class MetricProgress(Callback):
 
     def on_train_begin(self, logs={}):
         self.fold_start = time()
-        line = f'----- Fold {self.nth_fold} of {self.n_splits} -----'
+        line = f'\n\n----- Fold {self.nth_fold} of {self.n_splits} -----'
         save_line_to_file(line, self.progress_file_path, 'a')
 
     def on_train_end(self, logs={}):
         _, fold_elapsed_str = get_time_elapsed(self.fold_start)
-        line = f'Fold {self.nth_fold} training runtime: {fold_elapsed_str}\n'
+        line = f'Fold {self.nth_fold} training runtime: {fold_elapsed_str}'
         save_line_to_file(line, self.progress_file_path, 'a')
 
     def on_epoch_begin(self, epoch, logs={}):
