@@ -122,20 +122,72 @@ def save_model_summary(model, file_path):
         with redirect_stdout(f):
             model.summary()
 
-def build_random_cnn_model(embedding_layer, max_sequence_length):    
-    input_layer = Input(shape=(max_sequence_length,),
-                        dtype='int32',
-                        name='input_layer')
-    x = embedding_layer(input_layer)
-
+def get_random_cnn_params(normal_arch_threshold=0.8):
     filters = int(np.random.choice([32, 64, 128, 256, 300]))
     kernel_size = int(np.random.choice([3, 5, 7, 9]))
     dropout_rate = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
     optimizer = str(np.random.choice(['adam', 'rmsprop']))
 
     special_arch_value = float(np.random.uniform(0, 1))
-    normal_arch_threshold = 0.8 # Use normal architecture 80% of the time
+    # `normal_arch_threshold = 0.8` by default:
+    # Use normal architecture 80% of the time
     use_special_arch = special_arch_value > normal_arch_threshold
+
+    nap = {}
+
+    if not use_special_arch:
+        nap['num_conv_stacks'] = int(np.random.choice([1, 2, 3]))
+        nap['add_extra_conv_layer'] = bool(np.random.choice([True, False]))
+        nap['add_dropout_layer'] = bool(np.random.choice([True, False]))
+
+        nap['flatten'] = bool(np.random.choice([True, False]))
+        nap['use_global_max_pooling_layer'] = bool(np.random.choice([True, False]))
+        nap['add_final_dropout_layer'] = bool(np.random.choice([True, False]))
+
+        nap['pool_size'] = int(np.random.choice([2, 3, 4, 5]))
+        nap['final_dropout_rate'] = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
+
+    return {
+        'filters': filters,
+        'kernel_size': kernel_size,
+        'dropout_rate': dropout_rate,
+        'optimizer': optimizer,
+        'use_special_arch': use_special_arch,
+        'normal_arch_params': nap,
+    }
+
+def get_random_rnn_params(one_stack_threshold=0.7):
+    use_lstm_model = bool(np.random.choice([True, False]))
+    RNNLayer = CuDNNLSTM if use_lstm_model else CuDNNGRU
+    use_global_max_pooling_layer = bool(np.random.choice([True, False]))
+
+    units = int(np.random.choice([32, 64, 128, 256, 300]))
+    spatial_dropout_rate = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
+
+    use_extra_stack_value = float(np.random.uniform(0, 1))
+    # `one_stack_threshold = 0.7` by default:
+    # Use one RNN stack 70% of the time
+    num_rnn_stacks = 2 if use_extra_stack_value > one_stack_threshold else 1
+
+    return {
+        'RNNLayer': RNNLayer,
+        'use_global_max_pooling_layer': use_global_max_pooling_layer,
+        'units': units,
+        'spatial_dropout_rate': spatial_dropout_rate,
+        'num_rnn_stacks': num_rnn_stacks,
+    }
+
+def build_random_cnn_model(embedding_layer, max_sequence_length, params):    
+    input_layer = Input(shape=(max_sequence_length,),
+                        dtype='int32',
+                        name='input_layer')
+    x = embedding_layer(input_layer)
+
+    filters = params['filters']
+    kernel_size = params['kernel_size']
+    dropout_rate = params['dropout_rate']
+    optimizer = params['optimizer']
+    use_special_arch = params['use_special_arch']
 
     if use_special_arch:
         x = Dropout(dropout_rate)(x)
@@ -146,16 +198,15 @@ def build_random_cnn_model(embedding_layer, max_sequence_length):
         x = Dropout(dropout_rate)(x)
 
     else:
-        num_conv_stacks = int(np.random.choice([1, 2, 3]))
-        add_extra_conv_layer = bool(np.random.choice([True, False]))
-        add_dropout_layer = bool(np.random.choice([True, False]))
-
-        flatten = bool(np.random.choice([True, False]))
-        use_global_max_pooling_layer = bool(np.random.choice([True, False]))
-        add_final_dropout_layer = bool(np.random.choice([True, False]))
-
-        pool_size = int(np.random.choice([2, 3, 4, 5]))
-        final_dropout_rate = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
+        nap = params['normal_arch_params']
+        num_conv_stacks = nap['num_conv_stacks']
+        add_extra_conv_layer = nap['add_extra_conv_layer']
+        add_dropout_layer = nap['add_dropout_layer']
+        flatten = nap['flatten']
+        use_global_max_pooling_layer = nap['use_global_max_pooling_layer']
+        add_final_dropout_layer = nap['add_final_dropout_layer']
+        pool_size = nap['pool_size']
+        final_dropout_rate = nap['final_dropout_rate']
 
         for i in range(num_conv_stacks):
             x = Conv1D(filters, kernel_size, activation='relu', padding='same')(x)
@@ -189,26 +240,21 @@ def build_random_cnn_model(embedding_layer, max_sequence_length):
                   metrics=['accuracy'])
     return model
 
-def build_random_rnn_model(embedding_layer, max_sequence_length):
+def build_random_rnn_model(embedding_layer, max_sequence_length, params):
     input_layer = Input(shape=(max_sequence_length,),
                         dtype='int32',
                         name='input_layer')
     x = embedding_layer(input_layer)
     
-    use_lstm_model = bool(np.random.choice([True, False]))
-    RNNModel = CuDNNLSTM if use_lstm_model else CuDNNGRU
-    use_global_max_pooling_layer = bool(np.random.choice([True, False]))
-
-    units = int(np.random.choice([32, 64, 128, 256, 300]))
-    spatial_dropout_rate = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
-
-    use_extra_stack_value = float(np.random.uniform(0, 1))
-    one_stack_threshold = 0.7 # Use one RNN stack 70% of the time
-    num_rnn_stacks = 2 if use_extra_stack_value > one_stack_threshold else 1
+    RNNLayer = params['RNNLayer']
+    use_global_max_pooling_layer = params['use_global_max_pooling_layer']
+    units = params['units']
+    spatial_dropout_rate = params['spatial_dropout_rate']
+    num_rnn_stacks = params['num_rnn_stacks']
 
     for i in range(num_rnn_stacks):
         x = SpatialDropout1D(spatial_dropout_rate)(x)
-        x = Bidirectional(RNNModel(units, return_sequences=True))(x)
+        x = Bidirectional(RNNLayer(units, return_sequences=True))(x)
 
     if use_global_max_pooling_layer:
         x = GlobalMaxPooling1D()(x)
@@ -224,7 +270,7 @@ def build_random_rnn_model(embedding_layer, max_sequence_length):
                   metrics=['accuracy'])
     return model
 
-def build_cnn_model(embedding_layer, max_sequence_length, flatten=False):    
+def build_cnn_model(embedding_layer, max_sequence_length):    
     input_layer = Input(shape=(max_sequence_length,),
                         dtype='int32',
                         name='input_layer')
