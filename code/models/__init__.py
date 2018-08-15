@@ -162,8 +162,7 @@ def get_random_cnn_params(normal_arch_threshold=0.8):
 def get_random_rnn_params(one_stack_threshold=0.7):
     batch_size = int(np.random.choice([32, 64, 128, 256, 512]))
 
-    use_lstm_model = bool(np.random.choice([True, False]))
-    RNNLayer = CuDNNLSTM if use_lstm_model else CuDNNGRU
+    use_gru_layer = bool(np.random.choice([True, False]))
     use_global_max_pooling_layer = bool(np.random.choice([True, False]))
 
     units = int(np.random.choice([32, 64, 128, 256, 300]))
@@ -177,7 +176,7 @@ def get_random_rnn_params(one_stack_threshold=0.7):
 
     return {
         'batch_size': batch_size,
-        'RNNLayer': RNNLayer,
+        'use_gru_layer': use_gru_layer,
         'use_global_max_pooling_layer': use_global_max_pooling_layer,
         'units': units,
         'spatial_dropout_rate': spatial_dropout_rate,
@@ -254,7 +253,7 @@ def build_rnn_model(embedding_layer, max_sequence_length, params):
                         name='input_layer')
     x = embedding_layer(input_layer)
     
-    RNNLayer = params['RNNLayer']
+    RNNLayer = CuDNNGRU if params['use_gru_layer'] else CuDNNLSTM
     use_global_max_pooling_layer = params['use_global_max_pooling_layer']
     units = params['units']
     spatial_dropout_rate = params['spatial_dropout_rate']
