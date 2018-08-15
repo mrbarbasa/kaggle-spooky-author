@@ -163,6 +163,7 @@ def get_random_rnn_params(one_stack_threshold=0.7):
 
     units = int(np.random.choice([32, 64, 128, 256, 300]))
     spatial_dropout_rate = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
+    optimizer = str(np.random.choice(['adam', 'rmsprop']))
 
     use_extra_stack_value = float(np.random.uniform(0, 1))
     # `one_stack_threshold = 0.7` by default:
@@ -174,10 +175,11 @@ def get_random_rnn_params(one_stack_threshold=0.7):
         'use_global_max_pooling_layer': use_global_max_pooling_layer,
         'units': units,
         'spatial_dropout_rate': spatial_dropout_rate,
+        'optimizer': optimizer,
         'num_rnn_stacks': num_rnn_stacks,
     }
 
-def build_random_cnn_model(embedding_layer, max_sequence_length, params):    
+def build_cnn_model(embedding_layer, max_sequence_length, params):    
     input_layer = Input(shape=(max_sequence_length,),
                         dtype='int32',
                         name='input_layer')
@@ -240,7 +242,7 @@ def build_random_cnn_model(embedding_layer, max_sequence_length, params):
                   metrics=['accuracy'])
     return model
 
-def build_random_rnn_model(embedding_layer, max_sequence_length, params):
+def build_rnn_model(embedding_layer, max_sequence_length, params):
     input_layer = Input(shape=(max_sequence_length,),
                         dtype='int32',
                         name='input_layer')
@@ -250,8 +252,9 @@ def build_random_rnn_model(embedding_layer, max_sequence_length, params):
     use_global_max_pooling_layer = params['use_global_max_pooling_layer']
     units = params['units']
     spatial_dropout_rate = params['spatial_dropout_rate']
+    optimizer = params['optimizer']
     num_rnn_stacks = params['num_rnn_stacks']
-
+    
     for i in range(num_rnn_stacks):
         x = SpatialDropout1D(spatial_dropout_rate)(x)
         x = Bidirectional(RNNLayer(units, return_sequences=True))(x)
@@ -266,45 +269,6 @@ def build_random_rnn_model(embedding_layer, max_sequence_length, params):
     output_layer = Dense(3, activation='softmax', name='output_layer')(x)
     model = Model(inputs=input_layer, outputs=output_layer)
     model.compile(loss='categorical_crossentropy',
-                  optimizer='adam',
-                  metrics=['accuracy'])
-    return model
-
-def build_cnn_model(embedding_layer, max_sequence_length):    
-    input_layer = Input(shape=(max_sequence_length,),
-                        dtype='int32',
-                        name='input_layer')
-    x = embedding_layer(input_layer)
-
-    # Todo: Choose the best CNN model from the random search run
-    x = Dropout(0.2)(x)
-    x = Conv1D(250, 3, activation='relu', padding='same')(x)
-    x = GlobalMaxPooling1D()(x)
-
-    x = Dense(250, activation='relu')(x)
-    x = Dropout(0.2)(x)
-
-    output_layer = Dense(3, activation='softmax', name='output_layer')(x)
-    model = Model(inputs=input_layer, outputs=output_layer)
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='adam',
-                  metrics=['accuracy'])
-    return model
-
-def build_rnn_model(embedding_layer, max_sequence_length):
-    input_layer = Input(shape=(max_sequence_length,),
-                        dtype='int32',
-                        name='input_layer')
-    x = embedding_layer(input_layer)
-    
-    # Todo: Choose the best LSTM or GRU model from the random search run
-    x = SpatialDropout1D(0.2)(x)
-    x = Bidirectional(CuDNNGRU(128, return_sequences=True))(x)
-    x = GlobalMaxPooling1D()(x)
-
-    output_layer = Dense(3, activation='softmax', name='output_layer')(x)
-    model = Model(inputs=input_layer, outputs=output_layer)
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='adam',
+                  optimizer=optimizer,
                   metrics=['accuracy'])
     return model
