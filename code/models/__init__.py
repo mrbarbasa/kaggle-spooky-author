@@ -123,6 +123,8 @@ def save_model_summary(model, file_path):
             model.summary()
 
 def get_random_cnn_params(normal_arch_threshold=0.8):
+    batch_size = int(np.random.choice([32, 64, 128, 256, 512]))
+
     filters = int(np.random.choice([32, 64, 128, 256, 300]))
     kernel_size = int(np.random.choice([3, 5, 7, 9]))
     dropout_rate = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
@@ -148,6 +150,7 @@ def get_random_cnn_params(normal_arch_threshold=0.8):
         nap['final_dropout_rate'] = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
 
     return {
+        'batch_size': batch_size,
         'filters': filters,
         'kernel_size': kernel_size,
         'dropout_rate': dropout_rate,
@@ -157,6 +160,8 @@ def get_random_cnn_params(normal_arch_threshold=0.8):
     }
 
 def get_random_rnn_params(one_stack_threshold=0.7):
+    batch_size = int(np.random.choice([32, 64, 128, 256, 512]))
+
     use_lstm_model = bool(np.random.choice([True, False]))
     RNNLayer = CuDNNLSTM if use_lstm_model else CuDNNGRU
     use_global_max_pooling_layer = bool(np.random.choice([True, False]))
@@ -171,6 +176,7 @@ def get_random_rnn_params(one_stack_threshold=0.7):
     num_rnn_stacks = 2 if use_extra_stack_value > one_stack_threshold else 1
 
     return {
+        'batch_size': batch_size,
         'RNNLayer': RNNLayer,
         'use_global_max_pooling_layer': use_global_max_pooling_layer,
         'units': units,
