@@ -3,7 +3,7 @@ import numpy as np
 from time import time
 from contextlib import redirect_stdout
 
-import keras.backend as K
+from keras import backend as K
 from keras.callbacks import Callback, ModelCheckpoint, EarlyStopping, CSVLogger
 
 from keras.models import Model
@@ -184,7 +184,9 @@ def get_random_rnn_params(one_stack_threshold=0.7):
         'num_rnn_stacks': num_rnn_stacks,
     }
 
-def build_cnn_model(embedding_layer, max_sequence_length, params):    
+def build_cnn_model(embedding_layer, max_sequence_length, params):
+    K.clear_session()
+
     input_layer = Input(shape=(max_sequence_length,),
                         dtype='int32',
                         name='input_layer')
@@ -248,6 +250,8 @@ def build_cnn_model(embedding_layer, max_sequence_length, params):
     return model
 
 def build_rnn_model(embedding_layer, max_sequence_length, params):
+    K.clear_session()
+
     input_layer = Input(shape=(max_sequence_length,),
                         dtype='int32',
                         name='input_layer')
