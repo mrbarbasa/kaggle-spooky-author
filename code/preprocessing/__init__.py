@@ -1,5 +1,13 @@
+import string
 import numpy as np
 from tqdm import tqdm
+
+from nltk import pos_tag
+from nltk.text import Text
+from nltk.corpus import stopwords, wordnet
+from nltk.tokenize import word_tokenize
+from nltk.stem.porter import PorterStemmer
+from nltk.stem.wordnet import WordNetLemmatizer
 
 from sklearn.preprocessing import LabelEncoder
 
@@ -7,12 +15,81 @@ from keras.utils import to_categorical
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 
+from preprocessing.gb_to_us_dictionary import gb_to_us_dictionary
+
+nltk_stopwords = set(stopwords.words('english'))
+
+def convert_gb_to_us_spelling(word):
+    # Return the American English spelling of the British-spelled word
+    if word in gb_to_us_dictionary:
+        return gb_to_us_dictionary[word]
+    else:
+        return word
+
+def get_wordnet_pos(tag):
+    # `tag` is the Penn Treebank tag that NLTK
+    # outputs for its `pos_tag` function
+    if tag.startswith('V'):
+        return wordnet.VERB # v
+    elif tag.startswith('J'):
+        return wordnet.ADJ # a
+    elif tag.startswith('R'):
+        return wordnet.ADV # r
+    else: # Default or starts with 'N'
+        return wordnet.NOUN # n
+
+def process_text(text,
+                 lower=True,
+                 remove_punc=False,
+                 normalize_spelling=False,
+                 stem=False,
+                 lemmatize=False,
+                 remove_stopwords=False):
+    # Convert to lowercase in order to treat "the" and "The" as the same word
+    if lower:
+        text = text.lower()
+    
+    # Remove punctuation
+    if remove_punc:
+        regex_punc = re.compile('[%s]' % re.escape(string.punctuation))
+        text = regex_punc.sub('', text)
+        
+    # Tokenize words, treating punctuation (if any) as separate tokens
+    tokens = word_tokenize(text)
+    
+    # Convert British English to American English spelling
+    if normalize_spelling:
+        tokens = [convert_gb_to_us_spelling(w) for w in tokens]
+    
+    # Reduce words to their stem
+    if stem:
+        porter = PorterStemmer()
+        tokens = [porter.stem(w) for w in tokens]
+    
+    # Lemmatize words
+    if lemmatize:        
+        lem = WordNetLemmatizer()
+        word_tags = pos_tag(tokens)
+        tokens = [lem.lemmatize(w, pos=get_wordnet_pos(t)) for w,t in word_tags]
+        
+    # Remove stopwords
+    if remove_stopwords:
+        tokens = [w for w in tokens if not w in nltk_stopwords]
+        
+    return ' '.join(tokens)
+
 def compute_word_index(X_train_sequences,
                        X_test_sequences,
                        max_features,
                        max_sequence_length):
     # Only include the top `num_words` most common words
-    tokenizer = Tokenizer(num_words=max_features)
+    # `filters=''` means no characters will be filtered from the text
+    tokenizer = Tokenizer(num_words=max_features,
+                          filters='',
+                          lower=False,
+                          split=' ',
+                          char_level=False,
+                          oov_token=None)
     # Build the word index, requiring a list argument
     tokenizer.fit_on_texts(X_train_sequences)
 
