@@ -184,6 +184,23 @@ def get_random_rnn_params(one_stack_threshold=0.7):
         'num_rnn_stacks': num_rnn_stacks,
     }
 
+def get_random_mlp_params():
+    batch_size = int(np.random.choice([32, 64, 128, 256, 512]))
+
+    units = int(np.random.choice([32, 64, 128, 256, 300]))
+    dropout_rate = float(np.random.choice([0.1, 0.2, 0.3, 0.4, 0.5]))
+    optimizer = str(np.random.choice(['adam', 'rmsprop']))
+
+    num_total_layers = int(np.random.choice([2, 3]))
+
+    return {
+        'batch_size': batch_size,
+        'units': units,
+        'dropout_rate': dropout_rate,
+        'optimizer': optimizer,
+        'num_total_layers': num_total_layers,
+    }
+
 def build_cnn_model(embedding_layer, max_sequence_length, params):
     K.clear_session()
 
@@ -274,6 +291,39 @@ def build_rnn_model(embedding_layer, max_sequence_length, params):
         avg_pooling = GlobalAveragePooling1D()(x)
         max_pooling = GlobalMaxPooling1D()(x)
         x = concatenate([avg_pooling, max_pooling])
+
+    output_layer = Dense(3, activation='softmax', name='output_layer')(x)
+    model = Model(inputs=input_layer, outputs=output_layer)
+    model.compile(loss='categorical_crossentropy',
+                  optimizer=optimizer,
+                  metrics=['accuracy'])
+    return model
+
+# Based on Google's `mlp_model` architecture:
+# https://developers.google.com/machine-learning/guides/text-classification/step-4
+#
+# Note that Google appears to define the "number of layers" in an MLP
+# to include the output layer. So let's call it `num_total_layers` to
+# avoid confusion.
+def build_mlp_model(input_shape, params):
+    K.clear_session()
+
+    input_layer = Input(shape=input_shape,
+                        dtype='float',
+                        name='input_layer')
+
+    units = params['units']
+    dropout_rate = params['dropout_rate']
+    optimizer = params['optimizer']
+    num_total_layers = params['num_total_layers']
+
+    x = Dropout(dropout_rate)(input_layer)
+
+    # We subtract 1 because the number of total layers includes the
+    # output layer
+    for i in range(num_total_layers-1):
+        x = Dense(units, activation='relu')(x)
+        x = Dropout(dropout_rate)(x)
 
     output_layer = Dense(3, activation='softmax', name='output_layer')(x)
     model = Model(inputs=input_layer, outputs=output_layer)
