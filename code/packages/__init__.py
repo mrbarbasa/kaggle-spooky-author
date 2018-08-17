@@ -20,7 +20,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 
-from preprocessing import process_text, compute_word_index
+from preprocessing import process_text, vectorize_ngrams, compute_word_index
 from preprocessing import load_embeddings, construct_embedding_matrix
 from preprocessing import integer_encode_classes, one_hot_encode_classes
 from stats import display_classification_summary, save_classification_summary

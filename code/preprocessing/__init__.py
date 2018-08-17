@@ -1,5 +1,6 @@
 import string
 import numpy as np
+
 from tqdm import tqdm
 
 from nltk import pos_tag
@@ -10,6 +11,8 @@ from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
 
 from sklearn.preprocessing import LabelEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_selection import SelectKBest, f_classif
 
 from keras.utils import to_categorical
 from keras.preprocessing.text import Tokenizer
@@ -77,6 +80,68 @@ def process_text(text,
         tokens = [w for w in tokens if not w in nltk_stopwords]
         
     return ' '.join(tokens)
+
+# Based on Google's `ngram_vectorize` function:
+# https://developers.google.com/machine-learning/guides/text-classification/step-3
+def vectorize_ngrams(X_train_sequences,
+                     X_test_sequences,
+                     y_train_integers,
+                     max_features,
+                     token_mode,
+                     ngram_range,
+                     min_df):
+    """Constructs n-grams from text sequences and vectorizes them.
+    
+    Also scores the importance of the vectors and selects the most 
+    important features.
+    """
+    kwargs = {
+        # Google Text Classification settings
+        'encoding': 'utf-8',
+        'decode_error': 'replace',
+        'strip_accents': 'unicode',
+        'analyzer': token_mode,
+        'ngram_range': ngram_range,
+        'min_df': min_df,
+        'dtype': 'int32',
+        # Our own settings
+        # We use a custom tokenizer in order to treat punctuation as tokens
+        'tokenizer': word_tokenize,
+        'lowercase': False,
+        'stop_words': None, # Do not remove stopwords
+        # Only consider the top `max_features` ordered by term frequency 
+        # across the corpus
+        # 'max_features': max_features,
+    }
+    vectorizer = TfidfVectorizer(**kwargs)
+    
+    # Learn the vocabulary and idf from the training dataset
+    vectorizer.fit(X_train_sequences)
+    
+    # Encode the documents into a `scipy.sparse.csr.csr_matrix` so that
+    # each position in the row vector has the TF-IDF for that n-gram
+    X_train_tokenized = vectorizer.transform(X_train_sequences)
+    X_test_tokenized = vectorizer.transform(X_test_sequences)
+    
+    all_num_features = X_train_tokenized.shape[1]
+    print(f'Found {all_num_features} unique unigrams and bigrams.')
+
+    # Select the top k most important features (highest scoring).
+    # `f_classif` computes the ANOVA F-value between label/feature for 
+    # classification tasks.
+    k_best = min(max_features, X_train_tokenized.shape[1])
+    selector = SelectKBest(f_classif, k=k_best)
+    
+    selector.fit(X_train_tokenized, y_train_integers)
+    
+    X_train_tokenized = selector.transform(X_train_tokenized).astype('float32')
+    X_test_tokenized = selector.transform(X_test_tokenized).astype('float32')
+    
+    reduced_num_features = X_train_tokenized.shape[1]
+    print(f'But only kept the {reduced_num_features} most important ones.')
+    # If needed: Convert from a `scipy.sparse.csr.csr_matrix` to a
+    # `numpy.ndarray` by appending `.toarray()` to each of the following:
+    return X_train_tokenized, X_test_tokenized
 
 def compute_word_index(X_train_sequences,
                        X_test_sequences,
