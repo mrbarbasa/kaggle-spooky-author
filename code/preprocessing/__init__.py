@@ -104,6 +104,7 @@ def vectorize_ngrams(X_train_sequences,
         'ngram_range': ngram_range,
         'min_df': min_df,
         'dtype': 'int32',
+
         # Our own settings
         # We use a custom tokenizer in order to treat punctuation as tokens
         'tokenizer': word_tokenize,
@@ -111,7 +112,7 @@ def vectorize_ngrams(X_train_sequences,
         'stop_words': None, # Do not remove stopwords
         # Only consider the top `max_features` ordered by term frequency 
         # across the corpus
-        # 'max_features': max_features,
+        'max_features': max_features,
     }
     vectorizer = TfidfVectorizer(**kwargs)
     
@@ -123,22 +124,9 @@ def vectorize_ngrams(X_train_sequences,
     X_train_tokenized = vectorizer.transform(X_train_sequences)
     X_test_tokenized = vectorizer.transform(X_test_sequences)
     
-    all_num_features = X_train_tokenized.shape[1]
-    print(f'Found {all_num_features} unique unigrams and bigrams.')
+    num_features = X_train_tokenized.shape[1]
+    print(f'Found {num_features} unique unigrams and bigrams.')
 
-    # Select the top k most important features (highest scoring).
-    # `f_classif` computes the ANOVA F-value between label/feature for 
-    # classification tasks.
-    k_best = min(max_features, X_train_tokenized.shape[1])
-    selector = SelectKBest(f_classif, k=k_best)
-    
-    selector.fit(X_train_tokenized, y_train_integers)
-    
-    X_train_tokenized = selector.transform(X_train_tokenized).astype('float32')
-    X_test_tokenized = selector.transform(X_test_tokenized).astype('float32')
-    
-    reduced_num_features = X_train_tokenized.shape[1]
-    print(f'But only kept the {reduced_num_features} most important ones.')
     # If needed: Convert from a `scipy.sparse.csr.csr_matrix` to a
     # `numpy.ndarray` by appending `.toarray()` to each of the following:
     return X_train_tokenized, X_test_tokenized
