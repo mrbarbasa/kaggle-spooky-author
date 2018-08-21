@@ -1,0 +1,77 @@
+CV Results Summary:
+- val_loss mean and std: 0.52096 (+/- 0.02362)
+- val_acc mean and std: 0.78845 (+/- 0.01240)
+- loss mean and std: 0.47325 (+/- 0.11190)
+- acc mean and std: 0.80713 (+/- 0.05797)
+
+final_num_epochs = 2
+
+best_score_num_epochs = [2, 2, 2, 2, 1, 2, 2, 2, 2, 1]
+
+best_scores_per_fold = {
+    "val_loss": [
+        0.534221028265386,
+        0.4933317906397712,
+        0.561520831127931,
+        0.4888451081444379,
+        0.5189130554647319,
+        0.4998596648080774,
+        0.5505671659841426,
+        0.5022715442206217,
+        0.5222183911393476,
+        0.537852068945164
+    ],
+    "val_acc": [
+        0.7708014296657762,
+        0.797345584755713,
+        0.7748851456953714,
+        0.8034711590587271,
+        0.7992849841302944,
+        0.7996934084607193,
+        0.776699029004385,
+        0.7915176291153878,
+        0.7981604501551733,
+        0.772611139986548
+    ],
+    "loss": [
+        0.4102040145778764,
+        0.41368807420963327,
+        0.42074877920811077,
+        0.4171683975063036,
+        0.6988094018608506,
+        0.413619787637417,
+        0.42429812554231555,
+        0.42473405754169774,
+        0.41430196530999425,
+        0.6949200491915495
+    ],
+    "acc": [
+        0.8421679908923475,
+        0.8351872872007285,
+        0.8341089671099227,
+        0.8364926220069002,
+        0.6899154418159252,
+        0.8377596186720246,
+        0.8304392236773562,
+        0.8336738168537082,
+        0.8387810691249126,
+        0.6927704006288044
+    ]
+}
+
+Total stratified 10-fold loop runtime: 0:01:56
+Average training runtime per fold: 0:00:12
+
+Total stratified 10-fold prediction runtime: 0:00:01
+Average prediction runtime per fold: 0:00:00
+
+Fold 1 prediction runtime: 0:00:00
+Fold 2 prediction runtime: 0:00:00
+Fold 3 prediction runtime: 0:00:00
+Fold 4 prediction runtime: 0:00:00
+Fold 5 prediction runtime: 0:00:00
+Fold 6 prediction runtime: 0:00:00
+Fold 7 prediction runtime: 0:00:00
+Fold 8 prediction runtime: 0:00:00
+Fold 9 prediction runtime: 0:00:00
+Fold 10 prediction runtime: 0:00:00

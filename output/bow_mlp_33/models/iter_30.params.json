@@ -1,0 +1,7 @@
+{
+    "batch_size": 512,
+    "units": 256,
+    "dropout_rate": 0.4,
+    "optimizer": "rmsprop",
+    "num_total_layers": 2
+}

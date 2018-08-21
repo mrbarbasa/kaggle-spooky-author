@@ -1,0 +1,9 @@
+{
+    "batch_size": 64,
+    "use_gru_layer": true,
+    "use_global_max_pooling_layer": true,
+    "units": 32,
+    "spatial_dropout_rate": 0.3,
+    "optimizer": "adam",
+    "num_rnn_stacks": 1
+}

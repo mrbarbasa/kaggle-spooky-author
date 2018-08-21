@@ -1,0 +1,7 @@
+{
+    "batch_size": 256,
+    "units": 32,
+    "dropout_rate": 0.5,
+    "optimizer": "adam",
+    "num_total_layers": 2
+}

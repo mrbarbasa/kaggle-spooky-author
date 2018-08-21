@@ -1,0 +1,9 @@
+{
+    "batch_size": 128,
+    "filters": 300,
+    "kernel_size": 5,
+    "dropout_rate": 0.2,
+    "optimizer": "rmsprop",
+    "use_special_arch": true,
+    "normal_arch_params": {}
+}

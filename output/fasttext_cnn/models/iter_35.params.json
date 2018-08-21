@@ -1,0 +1,9 @@
+{
+    "batch_size": 64,
+    "filters": 256,
+    "kernel_size": 3,
+    "dropout_rate": 0.2,
+    "optimizer": "adam",
+    "use_special_arch": true,
+    "normal_arch_params": {}
+}

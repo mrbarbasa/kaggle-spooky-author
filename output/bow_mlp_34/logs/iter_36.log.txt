@@ -1,0 +1,271 @@
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+input_layer (InputLayer)     (None, 76318)             0         
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 76318)             0         
+_________________________________________________________________
+dense_1 (Dense)              (None, 256)               19537664  
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 256)               0         
+_________________________________________________________________
+dense_2 (Dense)              (None, 256)               65792     
+_________________________________________________________________
+dropout_3 (Dropout)          (None, 256)               0         
+_________________________________________________________________
+output_layer (Dense)         (None, 3)                 771       
+=================================================================
+Total params: 19,604,227
+Trainable params: 19,604,227
+Non-trainable params: 0
+_________________________________________________________________
+
+
+----- Fold 1 of 10 -----
+Epoch 001: val_loss improved from inf to 0.38756; runtime 0:00:07; BEST YET
+Epoch 002: val_loss improved from 0.38756 to 0.34839; runtime 0:00:06; BEST YET
+Epoch 003: val_loss did not improve from 0.34839; runtime 0:00:06
+Epoch 004: val_loss did not improve from 0.34839; runtime 0:00:06
+Epoch 005: val_loss did not improve from 0.34839; runtime 0:00:06
+Fold 1 training runtime: 0:00:31
+
+            ----- Classification Report -----
+             precision    recall  f1-score   support
+
+        EAP       0.83      0.89      0.86       790
+        HPL       0.93      0.79      0.85       564
+        MWS       0.84      0.88      0.86       605
+
+avg / total       0.86      0.86      0.86      1959
+
+            ----- Confusion Matrix -----
+True Labels  EAP  [705  22  63]
+             HPL  [ 84 445  35]
+             MWS  [ 61  11 533]
+                    EAP  HPL  MWS
+                  Predicted Labels
+
+
+----- Fold 2 of 10 -----
+Epoch 001: val_loss improved from inf to 0.35546; runtime 0:00:07; BEST YET
+Epoch 002: val_loss improved from 0.35546 to 0.32206; runtime 0:00:06; BEST YET
+Epoch 003: val_loss did not improve from 0.32206; runtime 0:00:06
+Epoch 004: val_loss did not improve from 0.32206; runtime 0:00:06
+Epoch 005: val_loss did not improve from 0.32206; runtime 0:00:06
+Fold 2 training runtime: 0:00:31
+
+            ----- Classification Report -----
+             precision    recall  f1-score   support
+
+        EAP       0.89      0.86      0.87       790
+        HPL       0.91      0.86      0.89       564
+        MWS       0.84      0.91      0.87       605
+
+avg / total       0.88      0.88      0.88      1959
+
+            ----- Confusion Matrix -----
+True Labels  EAP  [681  35  74]
+             HPL  [ 45 485  34]
+             MWS  [ 42  12 551]
+                    EAP  HPL  MWS
+                  Predicted Labels
+
+
+----- Fold 3 of 10 -----
+Epoch 001: val_loss improved from inf to 0.36529; runtime 0:00:07; BEST YET
+Epoch 002: val_loss improved from 0.36529 to 0.33144; runtime 0:00:06; BEST YET
+Epoch 003: val_loss did not improve from 0.33144; runtime 0:00:06
+Epoch 004: val_loss did not improve from 0.33144; runtime 0:00:06
+Epoch 005: val_loss did not improve from 0.33144; runtime 0:00:06
+Fold 3 training runtime: 0:00:31
+
+            ----- Classification Report -----
+             precision    recall  f1-score   support
+
+        EAP       0.83      0.89      0.86       790
+        HPL       0.89      0.86      0.88       564
+        MWS       0.88      0.82      0.85       605
+
+avg / total       0.86      0.86      0.86      1959
+
+            ----- Confusion Matrix -----
+True Labels  EAP  [704  43  43]
+             HPL  [ 51 487  26]
+             MWS  [ 91  16 498]
+                    EAP  HPL  MWS
+                  Predicted Labels
+
+
+----- Fold 4 of 10 -----
+Epoch 001: val_loss improved from inf to 0.36865; runtime 0:00:07; BEST YET
+Epoch 002: val_loss improved from 0.36865 to 0.32282; runtime 0:00:06; BEST YET
+Epoch 003: val_loss did not improve from 0.32282; runtime 0:00:06
+Epoch 004: val_loss did not improve from 0.32282; runtime 0:00:06
+Epoch 005: val_loss did not improve from 0.32282; runtime 0:00:06
+Fold 4 training runtime: 0:00:31
+
+            ----- Classification Report -----
+             precision    recall  f1-score   support
+
+        EAP       0.88      0.89      0.88       790
+        HPL       0.88      0.87      0.87       564
+        MWS       0.90      0.89      0.89       605
+
+avg / total       0.88      0.88      0.88      1959
+
+            ----- Confusion Matrix -----
+True Labels  EAP  [702  49  39]
+             HPL  [ 50 491  23]
+             MWS  [ 46  20 539]
+                    EAP  HPL  MWS
+                  Predicted Labels
+
+
+----- Fold 5 of 10 -----
+Epoch 001: val_loss improved from inf to 0.36094; runtime 0:00:07; BEST YET
+Epoch 002: val_loss improved from 0.36094 to 0.30167; runtime 0:00:06; BEST YET
+Epoch 003: val_loss did not improve from 0.30167; runtime 0:00:06
+Epoch 004: val_loss did not improve from 0.30167; runtime 0:00:06
+Epoch 005: val_loss did not improve from 0.30167; runtime 0:00:06
+Fold 5 training runtime: 0:00:31
+
+            ----- Classification Report -----
+             precision    recall  f1-score   support
+
+        EAP       0.89      0.86      0.88       790
+        HPL       0.87      0.93      0.90       564
+        MWS       0.88      0.87      0.88       604
+
+avg / total       0.88      0.88      0.88      1958
+
+            ----- Confusion Matrix -----
+True Labels  EAP  [681  52  57]
+             HPL  [ 27 525  12]
+             MWS  [ 53  26 525]
+                    EAP  HPL  MWS
+                  Predicted Labels
+
+
+----- Fold 6 of 10 -----
+Epoch 001: val_loss improved from inf to 0.37103; runtime 0:00:07; BEST YET
+Epoch 002: val_loss improved from 0.37103 to 0.35134; runtime 0:00:06; BEST YET
+Epoch 003: val_loss did not improve from 0.35134; runtime 0:00:06
+Epoch 004: val_loss did not improve from 0.35134; runtime 0:00:06
+Epoch 005: val_loss did not improve from 0.35134; runtime 0:00:06
+Fold 6 training runtime: 0:00:31
+
+            ----- Classification Report -----
+             precision    recall  f1-score   support
+
+        EAP       0.87      0.87      0.87       790
+        HPL       0.87      0.88      0.88       563
+        MWS       0.86      0.85      0.85       604
+
+avg / total       0.87      0.87      0.87      1957
+
+            ----- Confusion Matrix -----
+True Labels  EAP  [690  42  58]
+             HPL  [ 44 494  25]
+             MWS  [ 62  30 512]
+                    EAP  HPL  MWS
+                  Predicted Labels
+
+
+----- Fold 7 of 10 -----
+Epoch 001: val_loss improved from inf to 0.39440; runtime 0:00:07; BEST YET
+Epoch 002: val_loss improved from 0.39440 to 0.34669; runtime 0:00:06; BEST YET
+Epoch 003: val_loss did not improve from 0.34669; runtime 0:00:06
+Epoch 004: val_loss did not improve from 0.34669; runtime 0:00:06
+Epoch 005: val_loss did not improve from 0.34669; runtime 0:00:06
+Fold 7 training runtime: 0:00:31
+
+            ----- Classification Report -----
+             precision    recall  f1-score   support
+
+        EAP       0.87      0.87      0.87       790
+        HPL       0.87      0.89      0.88       563
+        MWS       0.86      0.85      0.85       604
+
+avg / total       0.87      0.87      0.87      1957
+
+            ----- Confusion Matrix -----
+True Labels  EAP  [690  39  61]
+             HPL  [ 41 500  22]
+             MWS  [ 59  34 511]
+                    EAP  HPL  MWS
+                  Predicted Labels
+
+
+----- Fold 8 of 10 -----
+Epoch 001: val_loss improved from inf to 0.36942; runtime 0:00:07; BEST YET
+Epoch 002: val_loss improved from 0.36942 to 0.32738; runtime 0:00:06; BEST YET
+Epoch 003: val_loss did not improve from 0.32738; runtime 0:00:06
+Epoch 004: val_loss did not improve from 0.32738; runtime 0:00:06
+Epoch 005: val_loss did not improve from 0.32738; runtime 0:00:06
+Fold 8 training runtime: 0:00:31
+
+            ----- Classification Report -----
+             precision    recall  f1-score   support
+
+        EAP       0.89      0.87      0.88       790
+        HPL       0.86      0.89      0.87       563
+        MWS       0.86      0.87      0.86       604
+
+avg / total       0.87      0.87      0.87      1957
+
+            ----- Confusion Matrix -----
+True Labels  EAP  [686  47  57]
+             HPL  [ 37 500  26]
+             MWS  [ 48  33 523]
+                    EAP  HPL  MWS
+                  Predicted Labels
+
+
+----- Fold 9 of 10 -----
+Epoch 001: val_loss improved from inf to 0.35872; runtime 0:00:07; BEST YET
+Epoch 002: val_loss improved from 0.35872 to 0.33797; runtime 0:00:06; BEST YET
+Epoch 003: val_loss did not improve from 0.33797; runtime 0:00:06
+Epoch 004: val_loss did not improve from 0.33797; runtime 0:00:06
+Epoch 005: val_loss did not improve from 0.33797; runtime 0:00:06
+Fold 9 training runtime: 0:00:31
+
+            ----- Classification Report -----
+             precision    recall  f1-score   support
+
+        EAP       0.84      0.92      0.88       790
+        HPL       0.92      0.83      0.87       563
+        MWS       0.88      0.85      0.86       604
+
+avg / total       0.88      0.87      0.87      1957
+
+            ----- Confusion Matrix -----
+True Labels  EAP  [729  22  39]
+             HPL  [ 63 468  32]
+             MWS  [ 72  19 513]
+                    EAP  HPL  MWS
+                  Predicted Labels
+
+
+----- Fold 10 of 10 -----
+Epoch 001: val_loss improved from inf to 0.33783; runtime 0:00:07; BEST YET
+Epoch 002: val_loss improved from 0.33783 to 0.30151; runtime 0:00:06; BEST YET
+Epoch 003: val_loss did not improve from 0.30151; runtime 0:00:06
+Epoch 004: val_loss did not improve from 0.30151; runtime 0:00:06
+Epoch 005: val_loss did not improve from 0.30151; runtime 0:00:06
+Fold 10 training runtime: 0:00:31
+
+            ----- Classification Report -----
+             precision    recall  f1-score   support
+
+        EAP       0.88      0.89      0.89       790
+        HPL       0.91      0.86      0.89       563
+        MWS       0.86      0.88      0.87       604
+
+avg / total       0.88      0.88      0.88      1957
+
+            ----- Confusion Matrix -----
+True Labels  EAP  [705  29  56]
+             HPL  [ 43 486  34]
+             MWS  [ 53  20 531]
+                    EAP  HPL  MWS
+                  Predicted Labels

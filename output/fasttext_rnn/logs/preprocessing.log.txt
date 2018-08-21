@@ -1,0 +1,1 @@
+Number of vocabulary words not found in the pre-trained embeddings: 1486 of 27765 (5.35%)

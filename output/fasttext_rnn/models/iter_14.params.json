@@ -1,0 +1,9 @@
+{
+    "batch_size": 256,
+    "use_gru_layer": false,
+    "use_global_max_pooling_layer": true,
+    "units": 256,
+    "spatial_dropout_rate": 0.5,
+    "optimizer": "rmsprop",
+    "num_rnn_stacks": 1
+}

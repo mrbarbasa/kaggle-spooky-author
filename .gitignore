@@ -2,7 +2,6 @@
 input/**/*
 !input/embeddings/.gitkeep
 output/**/models/*.hdf5
-output/**/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

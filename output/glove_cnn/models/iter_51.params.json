@@ -1,0 +1,18 @@
+{
+    "batch_size": 512,
+    "filters": 256,
+    "kernel_size": 9,
+    "dropout_rate": 0.2,
+    "optimizer": "adam",
+    "use_special_arch": false,
+    "normal_arch_params": {
+        "num_conv_stacks": 2,
+        "add_extra_conv_layer": true,
+        "add_dropout_layer": true,
+        "flatten": true,
+        "use_global_max_pooling_layer": false,
+        "add_final_dropout_layer": true,
+        "pool_size": 4,
+        "final_dropout_rate": 0.2
+    }
+}

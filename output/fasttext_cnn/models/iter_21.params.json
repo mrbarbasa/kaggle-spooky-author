@@ -1,0 +1,18 @@
+{
+    "batch_size": 128,
+    "filters": 256,
+    "kernel_size": 7,
+    "dropout_rate": 0.3,
+    "optimizer": "rmsprop",
+    "use_special_arch": false,
+    "normal_arch_params": {
+        "num_conv_stacks": 1,
+        "add_extra_conv_layer": false,
+        "add_dropout_layer": false,
+        "flatten": true,
+        "use_global_max_pooling_layer": false,
+        "add_final_dropout_layer": true,
+        "pool_size": 2,
+        "final_dropout_rate": 0.4
+    }
+}
