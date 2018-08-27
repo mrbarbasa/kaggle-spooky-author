@@ -2,23 +2,13 @@ import os
 import re
 import json
 import string
+
 import numpy as np
 import pandas as pd
-
 import matplotlib.pyplot as plt
 
 from time import time
-from tqdm import tqdm
-from scipy.stats import uniform
-from collections import Counter
-
-from sklearn.metrics import make_scorer
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split, RandomizedSearchCV, StratifiedKFold
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import StratifiedKFold
 
 from preprocessing import process_text, vectorize_ngrams, compute_word_index
 from preprocessing import load_embeddings, construct_embedding_matrix
