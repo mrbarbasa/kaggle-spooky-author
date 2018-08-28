@@ -10,8 +10,7 @@ def calculate_logloss(actual, predicted, epsilon=1e-15):
     actual : numpy.ndarray
         The actual class labels; has shape (num_samples,).
     predicted : numpy.ndarray
-        The predicted class labels; has shape
-        (num_samples, num_classes).
+        The predicted class labels; has shape (num_samples, num_classes).
     epsilon : int, optional
         The minimum `epsilon` and maximum `1 - epsilon` probability
         values before taking the log (to avoid log extremes).
