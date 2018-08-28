@@ -5,7 +5,7 @@ def get_random_rnn_params(one_stack_threshold=0.7):
 
     Parameters
     ----------
-    one_stack_threshold : float
+    one_stack_threshold : float, optional
         A fraction between 0 and 1 that specifies the probability of
         using one RNN stack over two RNN stacks.
 

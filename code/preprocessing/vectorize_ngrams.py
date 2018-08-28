@@ -2,8 +2,6 @@ from nltk.tokenize import word_tokenize
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-# Based on Google's `ngram_vectorize` function:
-# https://developers.google.com/machine-learning/guides/text-classification/step-3
 def vectorize_ngrams(X_train_sequences,
                      X_test_sequences,
                      y_train_integers,
@@ -11,11 +9,47 @@ def vectorize_ngrams(X_train_sequences,
                      token_mode,
                      ngram_range,
                      min_df):
-    """Constructs n-grams from text sequences and vectorizes them.
+    """Construct n-grams from text sequences and vectorize them.
     
-    Also scores the importance of the vectors and selects the most 
-    important features.
+    Also score the importance of the vectors via term frequency and
+    select the most important features, if a maximum is set.
+
+    Based on Google's `ngram_vectorize` function:
+    https://developers.google.com/machine-learning/guides/text-classification/step-3.
+
+    Parameters
+    ----------
+    X_train_sequences : list
+        A list of string sequences (sentences) from the train dataset.
+    X_test_sequences : list
+        A list of string sequences from the test dataset.
+    y_train_integers : numpy.ndarray
+        A numpy vector of integer-encoded classes in the shape of
+        (num_samples,).
+    max_features : int
+        The maximum number of n-gram features to include in the bag
+        of words; the most important n-grams by term frequency are
+        kept first. If set to None, then all n-grams are included.
+    token_mode : string
+        The mode of tokenization: Either 'word' for word-level or 'char'
+        for character-level tokenization.
+    ngram_range : tuple
+        A tuple of two integers for the range of n-grams to include in
+        the bag of words, such as (1, 2) for unigrams and bigrams.
+    min_df : int
+        The minimum document frequency (number of times a word appears
+        across documents in the corpus) required to include a word token
+        in the bag of words.
+
+    Returns
+    -------
+    results : tuple
+        - X_train_tokenized : numpy.ndarray
+            A 2D integer tensor of shape (num_train_samples, maxlen).
+        - X_test_tokenized : numpy.ndarray
+            A 2D integer tensor of shape (num_test_samples, maxlen).
     """
+
     kwargs = {
         # Google Text Classification settings
         'encoding': 'utf-8',

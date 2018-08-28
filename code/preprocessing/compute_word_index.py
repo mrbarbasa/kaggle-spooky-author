@@ -5,6 +5,34 @@ def compute_word_index(X_train_sequences,
                        X_test_sequences,
                        max_features,
                        max_sequence_length):
+    """Compute the vocabulary word index and vectorize the train and
+    test string sequences.
+
+    Parameters
+    ----------
+    X_train_sequences : list
+        A list of string sequences (sentences) from the train dataset.
+    X_test_sequences : list
+        A list of string sequences from the test dataset.
+    max_features : int
+        The maximum number of features (vocabulary words) to include in
+        every sequence; the larger (less common) word indices get
+        omitted first. If this is None, then no words get omitted.
+    max_sequence_length : int
+        The maximum length of (number of words in) a sequence before it
+        gets truncated; also, if the sequence is shorter, it gets padded.
+
+    Returns
+    -------
+    results : tuple
+        - X_train_tokenized : numpy.ndarray
+            A 2D integer tensor of shape (num_train_samples, maxlen).
+        - X_test_tokenized : numpy.ndarray
+            A 2D integer tensor of shape (num_test_samples, maxlen).
+        - word_index : dict
+            The computed word index, which maps a word to its index.
+    """
+
     # Only include the top `num_words` most common words
     # `filters=''` means no characters will be filtered from the text
     tokenizer = Tokenizer(num_words=max_features,
@@ -25,7 +53,7 @@ def compute_word_index(X_train_sequences,
     # Remove values, before each sequence, from sequences larger than 
     # `maxlen`
     # Turn a list of integers into a 2D integer tensor of shape
-    # (samples, maxlen)
+    # (num_samples, maxlen)
     X_train_tokenized = pad_sequences(X_train_tokenized, 
                                    maxlen=max_sequence_length, 
                                    padding='pre', 

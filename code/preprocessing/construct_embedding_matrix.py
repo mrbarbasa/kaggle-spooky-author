@@ -1,6 +1,31 @@
 import numpy as np
 
-def construct_embedding_matrix(word_index, embeddings_index, embedding_dim):    
+def construct_embedding_matrix(word_index, embeddings_index, embedding_dim):
+    """Construct the embedding weight matrix.
+
+    Parameters
+    ----------
+    word_index : dict
+        The computed word index, which maps a word to its index.
+    embeddings_index : dict
+        The embeddings index, which maps a word to its vector
+        representation.
+    embedding_dim : int
+        The dimensionality of the embedding space.
+    
+    Returns
+    -------
+    results : tuple
+        - embedding_matrix : numpy.ndarray
+            A 2D matrix of weights in the shape of
+            (vocab_size, embedding_dim).
+        - vocab_size : int
+            The size of the vocabulary.
+        - num_unknown : int
+            The number of unknown words (or words not found) in the
+            pre-trained embeddings.
+    """
+
     # Compute the embedding matrix using our training words `word_index`
     # and the pre-trained embeddings `embeddings_index`
     vocab_size = len(word_index) + 1

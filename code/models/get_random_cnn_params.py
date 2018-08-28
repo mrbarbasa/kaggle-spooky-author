@@ -5,7 +5,7 @@ def get_random_cnn_params(normal_arch_threshold=0.8):
 
     Parameters
     ----------
-    normal_arch_threshold : float
+    normal_arch_threshold : float, optional
         A fraction between 0 and 1 that specifies the probability of
         using the normal CNN architecture over the special architecture.
     

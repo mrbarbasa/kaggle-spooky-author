@@ -18,6 +18,32 @@ def process_text(text,
                  stem=False,
                  lemmatize=False,
                  remove_stopwords=False):
+    """Apply text preprocessing to the input text.
+
+    Parameters
+    ----------
+    text : string
+        A sequence (sentence) of words.
+    lower : bool, optional
+        Whether or not to lowercase the text.
+    remove_punc : bool, optional
+        Whether or not to remove all punctuation.
+    normalize_spelling : bool, optional
+        Whether or not to convert British English to American English
+        spelling.
+    stem : bool, optional
+        Whether or not to stem words.
+    lemmatize : bool, optional
+        Whether or not to lemmatize words.
+    remove_stopwords : bool, optional
+        Whether or not to remove stopwords.
+
+    Returns
+    -------
+    text : string
+        The preprocessed sequence.
+    """
+
     # Convert to lowercase in order to treat "the" and "The" as the same word
     if lower:
         text = text.lower()
