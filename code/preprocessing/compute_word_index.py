@@ -33,9 +33,14 @@ def compute_word_index(X_train_sequences,
             The computed word index, which maps a word to its index.
     """
 
-    # Only include the top `num_words` most common words
-    # `filters=''` means no characters will be filtered from the text
-    tokenizer = Tokenizer(num_words=max_features,
+    # We need to add 1 here because Keras has a quirk that it will
+    # discard the very last (highest index and least common) feature
+    # if we use the exact `max_features` size
+    num_words = max_features + 1 if max_features else None
+
+    # Only include the top `num_words` most common words.
+    # `filters=''` means no characters will be filtered from the text.    
+    tokenizer = Tokenizer(num_words=num_words,
                           filters='',
                           lower=False,
                           split=' ',
