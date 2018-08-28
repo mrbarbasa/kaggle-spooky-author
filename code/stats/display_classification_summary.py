@@ -3,6 +3,24 @@ import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix
 
 def display_classification_summary(y_valid, y_pred, labels, target_names):
+    """Display a classification report and confusion matrix.
+
+    Parameters
+    ----------
+    y_valid : numpy.ndarray
+        Actual labels for the validation data.
+    y_pred : numpy.ndarray
+        Model predictions.
+    labels : list
+        A list of integer index labels.
+    target_names : list
+        A list of target class strings mapped to the `labels`.
+    
+    Returns
+    -------
+    None
+    """
+
     # These label variables are like `y_train_integers` in format
     y_valid_class_labels = np.argmax(y_valid, axis=1)
     y_pred_class_labels = np.argmax(y_pred, axis=1)
