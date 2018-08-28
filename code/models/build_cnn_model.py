@@ -4,6 +4,63 @@ from keras.layers import Input, Dense, Flatten, Dropout, Conv1D, MaxPooling1D
 from keras.layers import GlobalMaxPooling1D, GlobalAveragePooling1D
 
 def build_cnn_model(embedding_layer, max_sequence_length, params):
+    """Build a CNN model using Keras.
+
+    Parameters
+    ----------
+    embedding_layer : keras.layers.Embedding
+        A preconstructed embedding layer.
+    max_sequence_length : int
+        The maximum length of a sequence (sentence).
+    params : dict
+        Model parameters and hyperparameters to govern the construction
+        of the CNN model. They are:
+        - batch_size : int
+            The number of samples per batch; after a batch is trained,
+            weights are updated.
+        - filters : int
+            The number of filters in a convolutional layer.
+        - kernel_size : int
+            The length of the 1D convolution window.
+        - dropout_rate : float
+            Fraction of the input units to drop.
+        - optimizer : string
+            An optimizer such as Adam or RMSProp.
+        - use_special_arch : bool
+            Whether or not to use the special CNN architecture.
+        - normal_arch_params : dict
+            This dictionary should only have keys if `use_special_arch`
+            is False; otherwise, it is an empty dictionary.
+            - num_conv_stacks : int
+                The number of convolutional stacks.
+            - add_extra_conv_layer : bool
+                Add an extra convolutional layer whenever a convolutional
+                layer appears.
+            - add_dropout_layer : bool
+                Add a dropout layer at the end of every convolutional
+                stack, after the max pooling layer.
+            - flatten : bool
+                Whether or not to end the CNN model with a Keras Flatten
+                and Dense layer, as opposed to one or two convolutional
+                layers followed by a global max or average pooling layer.
+            - use_global_max_pooling_layer : bool
+                Only applies if `flatten` is False: End the model with a
+                global max pooling layer instead of a global average.
+            - add_final_dropout_layer : bool
+                Add a final dropout layer right before the output layer.
+            - pool_size : int
+                Size of the max pooling windows.
+            - final_dropout_rate : float
+                Only applies if `add_final_dropout_layer` is True:
+                Fraction of the input units to drop for the final
+                dropout layer.
+
+    Returns
+    -------
+    model : keras.models.Model
+        The compiled Keras model.
+    """
+
     K.clear_session()
 
     input_layer = Input(shape=(max_sequence_length,),

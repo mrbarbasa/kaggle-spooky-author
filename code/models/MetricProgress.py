@@ -5,6 +5,29 @@ from keras.callbacks import Callback
 from utils import save_line_to_file, get_time_elapsed
 
 class MetricProgress(Callback):
+    """A custom Keras Callback to log epoch and fold runtimes and
+    whether the monitored metric improves from epoch to epoch.
+
+    Class Constructor Parameters
+    ----------
+    metric : string
+        The monitored metric, such as 'val_loss' or 'val_acc'.
+    mode : string
+        The string 'max' or 'min'; this indicates if the monitored
+        metric should maximize or minimize as a sign of improvement.
+    nth_fold : int
+        The current k-fold fold.
+    n_splits : int
+        The number of k-fold folds.
+    progress_file_path : string
+        A file path to where model improvement progress is recorded.
+
+    Returns
+    -------
+    callback : keras.callbacks.Callback
+        An instance of the custom MetricProgress callback.
+    """
+
     def __init__(self, metric, mode, nth_fold, n_splits, progress_file_path):
         super(Callback, self).__init__()
         self.metric = metric
