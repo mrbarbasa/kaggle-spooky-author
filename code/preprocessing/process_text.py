@@ -1,3 +1,4 @@
+import re
 import string
 
 from nltk import pos_tag
@@ -17,7 +18,8 @@ def process_text(text,
                  normalize_spelling=False,
                  stem=False,
                  lemmatize=False,
-                 remove_stopwords=False):
+                 remove_stopwords=False,
+                 return_tokens=False):
     """Apply text preprocessing to the input text.
 
     Parameters
@@ -37,11 +39,15 @@ def process_text(text,
         Whether or not to lemmatize words.
     remove_stopwords : bool, optional
         Whether or not to remove stopwords.
+    return_tokens : bool, optional
+        Whether or not to return a list of tokens (that form the
+        sequence) instead of a string sequence.
 
     Returns
     -------
-    text : string
-        The preprocessed sequence.
+    text or tokens : string or list
+        The preprocessed sequence string by default or, if `return_tokens`
+        is set to True, the preprocessed list of string tokens.
     """
 
     # Convert to lowercase in order to treat "the" and "The" as the same word
@@ -74,5 +80,10 @@ def process_text(text,
     # Remove stopwords
     if remove_stopwords:
         tokens = [w for w in tokens if not w in nltk_stopwords]
-        
+    
+    # Return a list of tokens instead of a single string sequence
+    if return_tokens:
+        return tokens
+
+    # Return a single string sequence
     return ' '.join(tokens)

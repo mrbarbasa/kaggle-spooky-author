@@ -8,6 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from time import time
+from collections import Counter
 from sklearn.model_selection import StratifiedKFold
 
 from preprocessing import process_text, vectorize_ngrams, compute_word_index
