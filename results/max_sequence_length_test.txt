@@ -1,0 +1,53 @@
+--- MAX_SEQUENCE_LENGTH Test
+- Tested:
+  - For: 10 folds and 100 epochs with early stopping
+  - With: glove.840B.300d.txt, batch size 64, and max features None
+
+- 23
+  CV Results Summary:
+  - val_loss mean and std: 0.78602 (+/- 0.00952)
+  - val_acc mean and std: 0.66040 (+/- 0.00742)
+  - loss mean and std: 0.71435 (+/- 0.08206)
+  - acc mean and std: 0.69470 (+/- 0.04952)
+- 27
+  CV Results Summary:
+  - val_loss mean and std: 0.78485 (+/- 0.01380)
+  - val_acc mean and std: 0.66352 (+/- 0.00706)
+  - loss mean and std: 0.65100 (+/- 0.03204)
+  - acc mean and std: 0.73095 (+/- 0.01679)
+- 34
+  CV Results Summary:
+  - val_loss mean and std: 0.77682 (+/- 0.01534)
+  - val_acc mean and std: 0.66546 (+/- 0.00944)
+  - loss mean and std: 0.69200 (+/- 0.10765)
+  - acc mean and std: 0.70627 (+/- 0.06041)
+- 128 --> Chosen, lowest val_loss of 0.77157
+  CV Results Summary:
+  - val_loss mean and std: 0.77157 (+/- 0.01591)
+  - val_acc mean and std: 0.67113 (+/- 0.00707)
+  - loss mean and std: 0.66342 (+/- 0.11902)
+  - acc mean and std: 0.71947 (+/- 0.06483)
+- 256
+  CV Results Summary:
+  - val_loss mean and std: 0.77263 (+/- 0.01396)
+  - val_acc mean and std: 0.67108 (+/- 0.00730)
+  - loss mean and std: 0.67290 (+/- 0.11243)
+  - acc mean and std: 0.71547 (+/- 0.06195)
+- 512
+  CV Results Summary:
+  - val_loss mean and std: 0.77410 (+/- 0.02318)
+  - val_acc mean and std: 0.67169 (+/- 0.00720)
+  - loss mean and std: 0.62327 (+/- 0.11739)
+  - acc mean and std: 0.74120 (+/- 0.06264)
+- 861
+  CV Results Summary:
+  - val_loss mean and std: 0.77306 (+/- 0.01293)
+  - val_acc mean and std: 0.66913 (+/- 0.00740)
+  - loss mean and std: 0.74307 (+/- 0.11848)
+  - acc mean and std: 0.67666 (+/- 0.06577)
+- 900
+  CV Results Summary:
+  - val_loss mean and std: 0.77408 (+/- 0.01340)
+  - val_acc mean and std: 0.66679 (+/- 0.00873)
+  - loss mean and std: 0.79190 (+/- 0.09794)
+  - acc mean and std: 0.65081 (+/- 0.05276)

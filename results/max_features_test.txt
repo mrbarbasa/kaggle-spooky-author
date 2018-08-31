@@ -1,0 +1,58 @@
+--- MAX_FEATURES Test
+- Tested:
+  - For: 10 folds and 20 epochs with early stopping
+  - With: glove.840B.300d.txt, batch size 64, and max sequence length 900
+
+- 9000
+  CV Results Summary:
+  - val_loss mean and std: 0.78721 (+/- 0.00975)
+  - val_acc mean and std: 0.66433 (+/- 0.00550)
+  - loss mean and std: 0.66353 (+/- 0.09865)
+  - acc mean and std: 0.71994 (+/- 0.05376)
+- 12000
+  CV Results Summary:
+  - val_loss mean and std: 0.78022 (+/- 0.01050)
+  - val_acc mean and std: 0.66903 (+/- 0.00798)
+  - loss mean and std: 0.62848 (+/- 0.07694)
+  - acc mean and std: 0.74069 (+/- 0.04186)
+- 15000
+  CV Results Summary:
+  - val_loss mean and std: 0.77263 (+/- 0.01089)
+  - val_acc mean and std: 0.67133 (+/- 0.00839)
+  - loss mean and std: 0.71652 (+/- 0.12849)
+  - acc mean and std: 0.69198 (+/- 0.06904)
+- 18000
+  CV Results Summary:
+  - val_loss mean and std: 0.77357 (+/- 0.01434)
+  - val_acc mean and std: 0.67343 (+/- 0.00592)
+  - loss mean and std: 0.64328 (+/- 0.10254)
+  - acc mean and std: 0.73110 (+/- 0.05526)
+- None (all features)
+  CV Results Summary:
+  - val_loss mean and std: 0.77064 (+/- 0.01665)
+  - val_acc mean and std: 0.67235 (+/- 0.00840)
+  - loss mean and std: 0.63976 (+/- 0.10539)
+  - acc mean and std: 0.73285 (+/- 0.05697)
+
+- 12000, 15000, None for 10 folds and 100 epochs with early stopping
+  - 15000 consistently did better than 12000
+  - None consistently did better than 15000
+  - 12000
+    CV Results Summary:
+    - val_loss mean and std: 0.77755 (+/- 0.01311)
+    - val_acc mean and std: 0.66740 (+/- 0.00951)
+    - loss mean and std: 0.70858 (+/- 0.11387)
+    - acc mean and std: 0.69556 (+/- 0.06180)
+  - 15000
+    CV Results Summary:
+    - val_loss mean and std: 0.77096 (+/- 0.01215)
+    - val_acc mean and std: 0.66929 (+/- 0.00783)
+    - loss mean and std: 0.74931 (+/- 0.11513)
+    - acc mean and std: 0.67382 (+/- 0.06337)
+  - None
+    CV Results Summary:
+    - val_loss mean and std: 0.76737 (+/- 0.01230)
+    - val_acc mean and std: 0.67429 (+/- 0.00867)
+    - loss mean and std: 0.69491 (+/- 0.11769)
+    - acc mean and std: 0.70303 (+/- 0.06422)
+  - In short, None performs the best, so using all unique tokens is the best
