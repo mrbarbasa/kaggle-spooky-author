@@ -3,6 +3,23 @@
   - For: 10 folds and 100 epochs with early stopping
   - With: glove.840B.300d.txt, batch size 64, and max features None
 
+- Model used for testing:
+  _________________________________________________________________
+  Layer (type)                 Output Shape              Param #   
+  =================================================================
+  input_layer (InputLayer)     (None, 900)               0         
+  _________________________________________________________________
+  embedding_27 (Embedding)     (None, 900, 300)          7783200   
+  _________________________________________________________________
+  flatten_27 (Flatten)         (None, 270000)            0         
+  _________________________________________________________________
+  output_layer (Dense)         (None, 3)                 810003    
+  =================================================================
+  Total params: 8,593,203
+  Trainable params: 810,003
+  Non-trainable params: 7,783,200
+  _________________________________________________________________
+
 - 23
   CV Results Summary:
   - val_loss mean and std: 0.78602 (+/- 0.00952)
