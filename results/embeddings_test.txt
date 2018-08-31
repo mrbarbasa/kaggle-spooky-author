@@ -1,0 +1,92 @@
+--- Pre-trained Embeddings Test
+- Tested:
+  - For: 10 folds and 20 epochs with early stopping
+  - With: glove.840B.300d.txt, batch size 64, max features 12000, and max sequence length 900
+- Final choices:
+  - GloVe: glove.840B.300d.txt
+  - fastText: crawl-300d-2M.vec
+
+- Model used for testing:
+  _________________________________________________________________
+  Layer (type)                 Output Shape              Param #   
+  =================================================================
+  input_layer (InputLayer)     (None, 900)               0         
+  _________________________________________________________________
+  embedding_27 (Embedding)     (None, 900, 300)          7783200   
+  _________________________________________________________________
+  flatten_27 (Flatten)         (None, 270000)            0         
+  _________________________________________________________________
+  output_layer (Dense)         (None, 3)                 810003    
+  =================================================================
+  Total params: 8,593,203
+  Trainable params: 810,003
+  Non-trainable params: 7,783,200
+  _________________________________________________________________
+
+- GloVe embeddings tested:
+  - glove.6B.300d.txt
+  	- Found 400000 word vectors.
+  	- Number of words vocabulary not found in the pre-trained embeddings: 3645 of 25943 (14.05%)
+  	- CV Results Summary:
+  		- val_loss mean and std: 0.82812 (+/- 0.01745)
+  		- val_acc mean and std: 0.63916 (+/- 0.00858)
+  		- loss mean and std: 0.77154 (+/- 0.11974)
+  		- acc mean and std: 0.65951 (+/- 0.06719)
+
+  - glove.42B.300d.txt: # Uncased
+  	- Found 1917494 word vectors.
+  	- Number of words vocabulary not found in the pre-trained embeddings: 2202 of 25943 (8.49%)
+  	- CV Results Summary:
+  		- val_loss mean and std: 0.80659 (+/- 0.01467)
+  		- val_acc mean and std: 0.65545 (+/- 0.01080)
+  		- loss mean and std: 0.66460 (+/- 0.10785)
+  		- acc mean and std: 0.71860 (+/- 0.05962)
+
+  - glove.840B.300d.txt: # Cased --> Lowest GloVe val_loss 0.78022, chosen
+  	- Found 2196016 word vectors.
+  	- Number of vocabulary words not found in the pre-trained embeddings: 2761 of 25943 (10.64%)
+  	- CV Results Summary:
+  		- val_loss mean and std: 0.78022 (+/- 0.01050)
+  		- val_acc mean and std: 0.66903 (+/- 0.00798)
+  		- loss mean and std: 0.62848 (+/- 0.07694)
+  		- acc mean and std: 0.74069 (+/- 0.04186)
+
+	- glove.840B.300d.txt: # Lowercased all words before loading them into a dictionary
+		- Found 1702926 word vectors. # Much less than 2196016
+  		- embeddings_index['The'] # Now throws a KeyError
+  		- embeddings_index['the'] # Works as before
+		- Number of vocabulary words not found in the pre-trained embeddings: 2302 of 25943 (8.87%)
+      - Found more words than before, but still less than glove.42B.300d.txt
+		- CV Results Summary:
+  		- val_loss mean and std: 0.88849 (+/- 0.01800)
+  		- val_acc mean and std: 0.60994 (+/- 0.00775)
+  		- loss mean and std: 0.72758 (+/- 0.12409)
+  		- acc mean and std: 0.68399 (+/- 0.07100)
+
+- fastText embeddings tested:
+  - wiki-news-300d-1M.vec
+  	- Found 999995 word vectors.
+  	- Number of vocabulary words not found in the pre-trained embeddings: 3414 of 25943 (13.16%)
+  	- CV Results Summary:
+  		- val_loss mean and std: 0.72923 (+/- 0.01374)
+  		- val_acc mean and std: 0.68951 (+/- 0.00955)
+  		- loss mean and std: 0.50859 (+/- 0.02585)
+  		- acc mean and std: 0.81698 (+/- 0.01145)
+
+  - wiki-news-300d-1M-subword.vec
+  	- Found 999995 word vectors.
+  	- Number of vocabulary words not found in the pre-trained embeddings: 3414 of 25943 (13.16%)
+  	- CV Results Summary:
+  		- val_loss mean and std: 0.79058 (+/- 0.00949)
+  		- val_acc mean and std: 0.65866 (+/- 0.00855)
+  		- loss mean and std: 0.57976 (+/- 0.01916)
+  		- acc mean and std: 0.78115 (+/- 0.00879)
+
+  - crawl-300d-2M.vec # Cased --> Lowest fastText val_loss 0.71973, chosen
+  	- Found 1999996 word vectors.
+  	- Number of vocabulary words not found in the pre-trained embeddings: 2687 of 25943 (10.36%)
+  	- CV Results Summary:
+  		- val_loss mean and std: 0.71973 (+/- 0.01180)
+  		- val_acc mean and std: 0.69375 (+/- 0.00555)
+  		- loss mean and std: 0.55090 (+/- 0.04245)
+  		- acc mean and std: 0.78917 (+/- 0.01972)
