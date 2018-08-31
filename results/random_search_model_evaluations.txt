@@ -1,0 +1,239 @@
+--- Random Search Model Evaluations
+- Examined the top 3 scoring (lowest validation loss) iterations per model and submitted to Kaggle on those model params. First loaded the scores for each fold and tried to find the best number of epochs to train the final model for.
+- Notes:
+  - Model params below are presented as follows:
+    - Tests #, #, #:
+      - Iteration # // Number of epochs the final model (used for a Kaggle submission to achieve the private_lb_logloss, public_lb_logloss, mean_lb_logloss, and lb_cv_mean in results/kaggle_spooky_author_submission_results.csv for tests 36 through 53) was trained for -- third place ten_fold_cv_logloss model
+      - Iteration # // Number of epochs the final model was trained for -- second place ten_fold_cv_logloss model
+      - Iteration # // Number of epochs the final model was trained for -- first place ten_fold_cv_logloss model
+  - See code/models/build_[mlp|cnn|rnn]_model.py and code/models/get_random_[mlp|cnn|rnn]_params.py for details on what goes into a model. Also see the corresponding iteration log files in output/[model_name]/logs/ to view the Keras `Model` summary output used for each model.
+
+
+--- BOW MLP 34
+- Between MLP models 33 and 34, 34 scored better with 55/60 of its iteration scoring better than the lowest scoring iteration that model 33 has (so lower than 0.34165).
+- Tests 36, 37, 38:
+	- Iteration 32 // 4 epochs
+		{
+		    "batch_size": 512,
+		    "units": 256,
+		    "dropout_rate": 0.2,
+		    "optimizer": "rmsprop",
+		    "num_total_layers": 2
+		}
+  - Iteration 24 // 20 epochs
+    {
+        "batch_size": 512,
+        "units": 64,
+        "dropout_rate": 0.5,
+        "optimizer": "rmsprop",
+        "num_total_layers": 2
+    }
+  - Iteration 34 // 25 epochs
+    {
+        "batch_size": 512,
+        "units": 32,
+        "dropout_rate": 0.4,
+        "optimizer": "rmsprop",
+        "num_total_layers": 2
+    }
+
+
+--- BOW MLP 33
+- Let's submit to Kaggle anyway, even if this model performed worse than 34.
+- Tests 39, 40, 41:
+  - Iteration 10 // 12 epochs
+    {
+        "batch_size": 256,
+        "units": 32,
+        "dropout_rate": 0.2,
+        "optimizer": "rmsprop",
+        "num_total_layers": 2
+    }
+  - Iteration 11 // 20 epochs
+    {
+        "batch_size": 256,
+        "units": 64,
+        "dropout_rate": 0.5,
+        "optimizer": "rmsprop",
+        "num_total_layers": 2
+    }
+	- Iteration 15 // 30 epochs
+		{
+		    "batch_size": 256,
+		    "units": 32,
+		    "dropout_rate": 0.5,
+		    "optimizer": "rmsprop",
+		    "num_total_layers": 2
+		}
+
+
+--- GLOVE CNN
+- Tests 42, 43, 44:
+  - Iteration 47 // 4 epochs
+    {
+        "batch_size": 512,
+        "filters": 256,
+        "kernel_size": 3,
+        "dropout_rate": 0.4,
+        "optimizer": "adam",
+        "use_special_arch": false,
+        "normal_arch_params": {
+            "num_conv_stacks": 2,
+            "add_extra_conv_layer": true,
+            "add_dropout_layer": true,
+            "flatten": false,
+            "use_global_max_pooling_layer": true,
+            "add_final_dropout_layer": true,
+            "pool_size": 3,
+            "final_dropout_rate": 0.4
+        }
+    }
+  - Iteration 15 // 2 epochs
+    {
+        "batch_size": 128,
+        "filters": 256,
+        "kernel_size": 3,
+        "dropout_rate": 0.4,
+        "optimizer": "adam",
+        "use_special_arch": false,
+        "normal_arch_params": {
+            "num_conv_stacks": 1,
+            "add_extra_conv_layer": true,
+            "add_dropout_layer": false,
+            "flatten": false,
+            "use_global_max_pooling_layer": true,
+            "add_final_dropout_layer": false,
+            "pool_size": 5,
+            "final_dropout_rate": 0.1
+        }
+    }
+	- Iteration 56 // 4 epochs
+		{
+		    "batch_size": 256,
+		    "filters": 256,
+		    "kernel_size": 3,
+		    "dropout_rate": 0.5,
+		    "optimizer": "adam",
+		    "use_special_arch": false,
+		    "normal_arch_params": {
+		        "num_conv_stacks": 1,
+		        "add_extra_conv_layer": false,
+		        "add_dropout_layer": true,
+		        "flatten": false,
+		        "use_global_max_pooling_layer": true,
+		        "add_final_dropout_layer": false,
+		        "pool_size": 5,
+		        "final_dropout_rate": 0.1
+		    }
+		}
+
+
+--- GLOVE RNN
+- Tests 45, 46, 47:
+  - Iteration 17 // 10 epochs
+    {
+        "batch_size": 256,
+        "use_gru_layer": true,
+        "use_global_max_pooling_layer": true,
+        "units": 256,
+        "spatial_dropout_rate": 0.3,
+        "optimizer": "adam",
+        "num_rnn_stacks": 1
+    }
+	- Iteration 33 // 6 epochs
+		{
+		    "batch_size": 128,
+		    "use_gru_layer": true,
+		    "use_global_max_pooling_layer": false,
+		    "units": 256,
+		    "spatial_dropout_rate": 0.1,
+		    "optimizer": "adam",
+		    "num_rnn_stacks": 1
+		}
+  - Iteration 58 // 6 epochs
+    {
+        "batch_size": 64,
+        "use_gru_layer": true,
+        "use_global_max_pooling_layer": true,
+        "units": 300,
+        "spatial_dropout_rate": 0.2,
+        "optimizer": "adam",
+        "num_rnn_stacks": 1
+    }
+
+
+--- FASTTEXT CNN
+- Tests 48, 49, 50:
+  - Iteration 49 // 3 epochs
+    {
+        "batch_size": 32,
+        "filters": 256,
+        "kernel_size": 3,
+        "dropout_rate": 0.2,
+        "optimizer": "rmsprop",
+        "use_special_arch": true,
+        "normal_arch_params": {}
+    }
+	- Iteration 35 // 3 epochs
+		{
+		    "batch_size": 64,
+		    "filters": 256,
+		    "kernel_size": 3,
+		    "dropout_rate": 0.2,
+		    "optimizer": "adam",
+		    "use_special_arch": true,
+		    "normal_arch_params": {}
+		}
+  - Iteration 07 // 5 epochs
+    {
+        "batch_size": 64,
+        "filters": 128,
+        "kernel_size": 3,
+        "dropout_rate": 0.5,
+        "optimizer": "rmsprop",
+        "use_special_arch": false,
+        "normal_arch_params": {
+            "num_conv_stacks": 2,
+            "add_extra_conv_layer": false,
+            "add_dropout_layer": true,
+            "flatten": false,
+            "use_global_max_pooling_layer": true,
+            "add_final_dropout_layer": false,
+            "pool_size": 3,
+            "final_dropout_rate": 0.1
+        }
+    }
+
+
+--- FASTTEXT RNN
+- Tests 51, 52, 53:
+  - Iteration 45 // 6 epochs
+    {
+        "batch_size": 32,
+        "use_gru_layer": true,
+        "use_global_max_pooling_layer": true,
+        "units": 300,
+        "spatial_dropout_rate": 0.5,
+        "optimizer": "adam",
+        "num_rnn_stacks": 1
+    }
+	- Iteration 24 // 10 epochs
+		{
+		    "batch_size": 256,
+		    "use_gru_layer": true,
+		    "use_global_max_pooling_layer": false,
+		    "units": 256,
+		    "spatial_dropout_rate": 0.3,
+		    "optimizer": "adam",
+		    "num_rnn_stacks": 1
+		}
+  - Iteration 08 // 9 epochs
+    {
+        "batch_size": 64,
+        "use_gru_layer": true,
+        "use_global_max_pooling_layer": false,
+        "units": 300,
+        "spatial_dropout_rate": 0.5,
+        "optimizer": "adam",
+        "num_rnn_stacks": 1
+    }
