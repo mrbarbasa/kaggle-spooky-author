@@ -25,6 +25,20 @@ My capstone project work on the [Kaggle Spooky Author Identification](https://ww
 
 ## Usage
 
+### Recommended Order to View the Notebook Files
+1. Start with exploratory data analysis (EDA): `code/eda_and_text_preprocessing.ipynb`.
+1. Follow along with tests 36 to 53 in `results/kaggle_spooky_author_submission_results.csv`:
+    1. `results/random_search_model_evaluations.txt`
+    1. `code/bow_mlp_34_model.ipynb`
+    1. `code/bow_mlp_33_model.ipynb`
+    1. `code/glove_cnn_model.ipynb`
+    1. `code/glove_rnn_model.ipynb`
+    1. `code/fasttext_cnn_model.ipynb`
+    1. `code/fasttext_rnn_model.ipynb`
+1. (Optional) Two scratch notebooks were used to make Kaggle submissions for some of the manual models:
+    1. `code/test_glove_models.ipynb`
+    1. `code/test_fasttext_models.ipynb`
+
 ### Creating a New Notebook for a Model
 1. Open an existing model notebook in the `code/` folder, select `File > Make a Copy...` from the Jupyter menu, and change the name to the new model.
 1. Change the title in the notebook to the new model.
