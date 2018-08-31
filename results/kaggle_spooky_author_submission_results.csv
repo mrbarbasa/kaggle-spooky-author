@@ -1,0 +1,54 @@
+test_num,private_lb_logloss,public_lb_logloss,mean_lb_logloss,ten_fold_cv_logloss,lb_cv_mean,filename,description
+1,1.09094,1.08199,1.08825,,,sample_submission.csv,The sample submission benchmark model
+2,0.51096,0.53244,0.51740,0.52041,0.51891,002_glove_best_manual_cnn_before_tp.csv,GloVe best manual CNN model before text preprocessing
+3,0.45205,0.47175,0.45796,0.44848,0.45322,003_glove_best_manual_rnn_before_tp.csv,GloVe best manual RNN model before text preprocessing
+4,0.44605,0.47341,0.45426,0.42506,0.43966,004_fasttext_best_manual_rnn_before_tp.csv,fastText best manual RNN model before text preprocessing
+5,0.46585,0.50380,0.47723,0.47282,0.47503,005_fasttext_best_manual_cnn_before_tp.csv,fastText best manual CNN model before text preprocessing
+6,0.59600,0.64511,0.61073,,,006_glove_best_manual_cnn_after_tp_a.csv,GloVe best manual CNN model after text preprocessing A
+7,0.54000,0.58667,0.55400,,,007_fasttext_best_manual_cnn_after_tp_a.csv,fastText best manual CNN model after text preprocessing A
+8,0.55337,0.59588,0.56612,,,008_glove_best_manual_cnn_after_tp_b.csv,GloVe best manual CNN model after text preprocessing B
+9,0.46540,0.51136,0.47919,,,009_fasttext_best_manual_cnn_after_tp_b.csv,fastText best manual CNN model after text preprocessing B
+10,0.47274,0.49362,0.47900,,,010_fasttext_best_manual_cnn_after_tp_c.csv,fastText best manual CNN model after text preprocessing C
+11,0.52695,0.53291,0.52874,,,011_glove_best_manual_cnn_after_tp_c.csv,GloVe best manual CNN model after text preprocessing C
+12,0.43795,0.47381,0.44871,,,012_fasttext_best_manual_cnn_after_tp_d.csv,fastText best manual CNN model after text preprocessing D
+13,0.49545,0.51770,0.50212,,,013_glove_best_manual_cnn_after_tp_d.csv,GloVe best manual CNN model after text preprocessing D
+14,0.42616,0.46261,0.43710,0.43531,0.43621,014_fasttext_best_manual_cnn_after_tp_e.csv,fastText best manual CNN model after text preprocessing E
+15,0.46794,0.48824,0.47403,,,015_glove_best_manual_cnn_after_tp_e.csv,GloVe best manual CNN model after text preprocessing E
+16,0.44053,0.46492,0.44785,,,016_fasttext_best_manual_cnn_after_tp_f.csv,fastText best manual CNN model after text preprocessing F
+17,0.48008,0.49188,0.48362,,,017_glove_best_manual_cnn_after_tp_f.csv,GloVe best manual CNN model after text preprocessing F
+18,0.46862,0.49863,0.47762,,,018_fasttext_best_manual_cnn_after_tp_g.csv,fastText best manual CNN model after text preprocessing G
+19,0.56794,0.58859,0.57413,,,019_glove_best_manual_cnn_after_tp_g.csv,GloVe best manual CNN model after text preprocessing G
+20,0.50928,0.54149,0.51894,,,020_glove_best_manual_cnn_after_tp_h.csv,GloVe best manual CNN model after text preprocessing H
+21,0.44472,0.48827,0.45778,,,021_fasttext_best_manual_cnn_after_tp_h.csv,fastText best manual CNN model after text preprocessing H
+22,0.48231,0.50000,0.48762,,,022_fasttext_best_manual_cnn_after_tp_i.csv,fastText best manual CNN model after text preprocessing I
+23,0.45703,0.46785,0.46028,0.47104,0.46566,023_glove_best_manual_cnn_after_tp_i.csv,GloVe best manual CNN model after text preprocessing I
+24,0.51765,0.53010,0.52138,,,024_glove_best_manual_cnn_after_tp_j.csv,GloVe best manual CNN model after text preprocessing J
+25,0.46854,0.50049,0.47813,,,025_fasttext_best_manual_cnn_after_tp_k.csv,fastText best manual CNN model after text preprocessing K
+26,0.47272,0.48951,0.47776,,,026_glove_best_manual_cnn_after_tp_i_2.csv,GloVe best manual CNN model after text preprocessing I take 2
+27,0.48172,0.51083,0.49045,,,027_fasttext_best_manual_cnn_after_tp_e_2.csv,fastText best manual CNN model after text preprocessing E take 2
+28,0.40947,0.42075,0.41285,0.40661,0.40973,028_glove_best_manual_rnn_after_tp_i.csv,GloVe best manual RNN model after text preprocessing I
+29,0.40069,0.42599,0.40828,0.37966,0.39397,029_fasttext_best_manual_rnn_after_tp_e.csv,fastText best manual RNN model after text preprocessing E
+30,0.36698,0.38822,0.37335,0.24266,0.30801,030_bow_google_mlp_after_tp_i.csv,Google's suggested params for a BoW MLP model after text preprocessing I
+31,0.35678,0.37835,0.36325,0.24163,0.30244,031_bow_google_mlp_after_tp_e.csv,Google's suggested params for a BoW MLP model after text preprocessing E
+32,0.37043,0.40030,0.37939,0.24232,0.31086,032_bow_mlp_trigrams_after_tp_e.csv,Google's suggested params for a BoW MLP model after text preprocessing E; includes trigrams
+33,0.35796,0.36803,0.36098,0.35602,0.35850,033_bow_mlp_no_f_classif_tp_e.csv,Google's suggested params for a BoW MLP model after text preprocessing E; selects max features using TfidfVectorizer instead of f_classif scoring
+34,0.33729,0.34644,0.34003,0.30814,0.32409,034_bow_mlp_all_features_tp_e.csv,"Google's suggested params for a BoW MLP model after text preprocessing E, includes all features"
+35,0.33888,0.34935,0.34202,0.31078,0.32640,035_bow_mlp_trigrams_all_features_tp_e.csv,"Google's suggested params for a BoW MLP model after text preprocessing E, includes trigrams and all features"
+36,0.33008,0.34225,0.33373,0.30226,0.31800,036_bow_mlp_iter_32_third.csv,"BoW MLP model after text preprocessing E, includes all features, iteration 32, third place CV model"
+37,0.29763,0.32199,0.30494,0.30108,0.30301,037_bow_mlp_iter_24_second.csv,"BoW MLP model after text preprocessing E, includes all features, iteration 24, second place CV model"
+38,0.30087,0.32400,0.30781,0.30098,0.30440,038_bow_mlp_iter_34_first.csv,"BoW MLP model after text preprocessing E, includes all features, iteration 34, first place CV model"
+39,0.34723,0.36816,0.35351,0.34488,0.34920,039_bow_mlp_33_iter_10_third.csv,"BoW MLP model after text preprocessing E, includes top 20k features, iteration 10, third place CV model"
+40,0.33680,0.35180,0.34130,0.34193,0.34162,040_bow_mlp_33_iter_11_second.csv,"BoW MLP model after text preprocessing E, includes top 20k features, iteration 11, second place CV model"
+41,0.33637,0.35332,0.34145,0.34165,0.34155,041_bow_mlp_33_iter_15_first.csv,"BoW MLP model after text preprocessing E, includes top 20k features, iteration 15, first place CV model"
+42,0.50168,0.51238,0.50489,0.48070,0.49280,042_glove_cnn_iter_47_third.csv,"GloVe CNN model after text preprocessing I, iteration 47, third place CV model"
+43,0.46700,0.49329,0.47489,0.47942,0.47716,043_glove_cnn_iter_15_second.csv,"GloVe CNN model after text preprocessing I, iteration 15, second place CV model"
+44,0.47237,0.49877,0.48029,0.46342,0.47186,044_glove_cnn_iter_56_first.csv,"GloVe CNN model after text preprocessing I, iteration 56, first place CV model"
+45,0.40368,0.42613,0.41041,0.39837,0.40439,045_glove_rnn_iter_17_third.csv,"GloVe RNN model after text preprocessing I, iteration 17, third place CV model"
+46,0.40246,0.42071,0.40793,0.39675,0.40234,046_glove_rnn_iter_33_second.csv,"GloVe RNN model after text preprocessing I, iteration 33, second place CV model"
+47,0.41337,0.44643,0.42329,0.39570,0.40950,047_glove_rnn_iter_58_first.csv,"GloVe RNN model after text preprocessing I, iteration 58, first place CV model"
+48,0.53250,0.55520,0.53931,0.43071,0.48501,048_fasttext_cnn_iter_49_third.csv,"fastText CNN model after text preprocessing E, iteration 49, third place CV model"
+49,0.50061,0.51390,0.50460,0.42728,0.46594,049_fasttext_cnn_iter_35_second.csv,"fastText CNN model after text preprocessing E, iteration 35, second place CV model"
+50,0.43267,0.44832,0.43736,0.42612,0.43174,050_fasttext_cnn_iter_07_first.csv,"fastText CNN model after text preprocessing E, iteration 07, first place CV model"
+51,0.44764,0.48371,0.45846,0.37522,0.41684,051_fasttext_rnn_iter_45_third.csv,"fastText RNN model after text preprocessing E, iteration 45, third place CV model"
+52,0.38450,0.41553,0.39381,0.37450,0.38416,052_fasttext_rnn_iter_24_second.csv,"fastText RNN model after text preprocessing E, iteration 24, second place CV model"
+53,0.36673,0.40475,0.37814,0.37397,0.37606,053_fasttext_rnn_iter_08_first.csv,"fastText RNN model after text preprocessing E, iteration 08, first place CV model"
