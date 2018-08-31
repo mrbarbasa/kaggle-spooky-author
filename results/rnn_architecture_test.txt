@@ -1,0 +1,291 @@
+--- RNN Architecture Test
+- Tested:
+  - For: 10 folds and 100 epochs with early stopping
+  - With: glove.840B.300d.txt, batch size 64, max features None, and max sequence length 128
+
+x = SpatialDropout1D(0.2)(x)
+x = Bidirectional(CuDNNGRU(128, return_sequences=True))(x)
+x = Conv1D(64, 2, padding='valid', kernel_initializer='he_uniform')(x)
+avg_pooling = GlobalAveragePooling1D()(x)
+max_pooling = GlobalMaxPooling1D()(x)
+x = concatenate([avg_pooling, max_pooling])
+	CV Results Summary:
+	- val_loss mean and std: 0.50455 (+/- 0.02194)
+	- val_acc mean and std: 0.80014 (+/- 0.00937)
+	- loss mean and std: 0.33391 (+/- 0.05210)
+	- acc mean and std: 0.87027 (+/- 0.02288)
+	__________________________________________________________________________________________________
+	Layer (type)                    Output Shape         Param #     Connected to                     
+	==================================================================================================
+	input_layer (InputLayer)        (None, 128)          0                                            
+	__________________________________________________________________________________________________
+	embedding_149 (Embedding)       (None, 128, 300)     7783200     input_layer[0][0]                
+	__________________________________________________________________________________________________
+	spatial_dropout1d_8 (SpatialDro (None, 128, 300)     0           embedding_149[0][0]              
+	__________________________________________________________________________________________________
+	bidirectional_8 (Bidirectional) (None, 128, 256)     330240      spatial_dropout1d_8[0][0]        
+	__________________________________________________________________________________________________
+	conv1d_401 (Conv1D)             (None, 127, 64)      32832       bidirectional_8[0][0]            
+	__________________________________________________________________________________________________
+	global_average_pooling1d_19 (Gl (None, 64)           0           conv1d_401[0][0]                 
+	__________________________________________________________________________________________________
+	global_max_pooling1d_63 (Global (None, 64)           0           conv1d_401[0][0]                 
+	__________________________________________________________________________________________________
+	concatenate_18 (Concatenate)    (None, 128)          0           global_average_pooling1d_19[0][0]
+	                                                                 global_max_pooling1d_63[0][0]    
+	__________________________________________________________________________________________________
+	output_layer (Dense)            (None, 3)            387         concatenate_18[0][0]             
+	==================================================================================================
+	Total params: 8,146,659
+	Trainable params: 363,459
+	Non-trainable params: 7,783,200
+	__________________________________________________________________________________________________
+
+x = SpatialDropout1D(0.2)(x)
+x = Bidirectional(CuDNNGRU(80, return_sequences=True))(x)
+avg_pooling = GlobalAveragePooling1D()(x)
+max_pooling = GlobalMaxPooling1D()(x)
+x = concatenate([avg_pooling, max_pooling])
+	CV Results Summary:
+	- val_loss mean and std: 0.45298 (+/- 0.02611)
+	- val_acc mean and std: 0.82170 (+/- 0.00934)
+	- loss mean and std: 0.27919 (+/- 0.04471)
+	- acc mean and std: 0.89511 (+/- 0.01854)
+	__________________________________________________________________________________________________
+	Layer (type)                    Output Shape         Param #     Connected to                     
+	==================================================================================================
+	input_layer (InputLayer)        (None, 128)          0                                            
+	__________________________________________________________________________________________________
+	embedding_160 (Embedding)       (None, 128, 300)     7783200     input_layer[0][0]                
+	__________________________________________________________________________________________________
+	spatial_dropout1d_19 (SpatialDr (None, 128, 300)     0           embedding_160[0][0]              
+	__________________________________________________________________________________________________
+	bidirectional_19 (Bidirectional (None, 128, 160)     183360      spatial_dropout1d_19[0][0]       
+	__________________________________________________________________________________________________
+	global_average_pooling1d_30 (Gl (None, 160)          0           bidirectional_19[0][0]           
+	__________________________________________________________________________________________________
+	global_max_pooling1d_74 (Global (None, 160)          0           bidirectional_19[0][0]           
+	__________________________________________________________________________________________________
+	concatenate_29 (Concatenate)    (None, 320)          0           global_average_pooling1d_30[0][0]
+	                                                                 global_max_pooling1d_74[0][0]    
+	__________________________________________________________________________________________________
+	output_layer (Dense)            (None, 3)            963         concatenate_29[0][0]             
+	==================================================================================================
+	Total params: 7,967,523
+	Trainable params: 184,323
+	Non-trainable params: 7,783,200
+	__________________________________________________________________________________________________
+
+x = SpatialDropout1D(0.2)(x)
+x = Bidirectional(CuDNNGRU(128, return_sequences=True))(x)
+avg_pooling = GlobalAveragePooling1D()(x)
+max_pooling = GlobalMaxPooling1D()(x)
+x = concatenate([avg_pooling, max_pooling])
+	CV Results Summary:
+	- val_loss mean and std: 0.45011 (+/- 0.02636)
+	- val_acc mean and std: 0.82165 (+/- 0.01198)
+	- loss mean and std: 0.26461 (+/- 0.04649)
+	- acc mean and std: 0.90427 (+/- 0.01984)
+	__________________________________________________________________________________________________
+	Layer (type)                    Output Shape         Param #     Connected to                     
+	==================================================================================================
+	input_layer (InputLayer)        (None, 128)          0                                            
+	__________________________________________________________________________________________________
+	embedding_171 (Embedding)       (None, 128, 300)     7783200     input_layer[0][0]                
+	__________________________________________________________________________________________________
+	spatial_dropout1d_30 (SpatialDr (None, 128, 300)     0           embedding_171[0][0]              
+	__________________________________________________________________________________________________
+	bidirectional_30 (Bidirectional (None, 128, 256)     330240      spatial_dropout1d_30[0][0]       
+	__________________________________________________________________________________________________
+	global_average_pooling1d_41 (Gl (None, 256)          0           bidirectional_30[0][0]           
+	__________________________________________________________________________________________________
+	global_max_pooling1d_85 (Global (None, 256)          0           bidirectional_30[0][0]           
+	__________________________________________________________________________________________________
+	concatenate_40 (Concatenate)    (None, 512)          0           global_average_pooling1d_41[0][0]
+	                                                                 global_max_pooling1d_85[0][0]    
+	__________________________________________________________________________________________________
+	output_layer (Dense)            (None, 3)            1539        concatenate_40[0][0]             
+	==================================================================================================
+	Total params: 8,114,979
+	Trainable params: 331,779
+	Non-trainable params: 7,783,200
+	__________________________________________________________________________________________________
+
+x = SpatialDropout1D(0.2)(x)
+x = Bidirectional(CuDNNGRU(128, return_sequences=True))(x)
+x = GlobalAveragePooling1D()(x)
+	CV Results Summary:
+	- val_loss mean and std: 0.50026 (+/- 0.02739)
+	- val_acc mean and std: 0.80668 (+/- 0.00835)
+	- loss mean and std: 0.36147 (+/- 0.05024)
+	- acc mean and std: 0.85844 (+/- 0.02235)
+	_________________________________________________________________
+	Layer (type)                 Output Shape              Param #   
+	=================================================================
+	input_layer (InputLayer)     (None, 128)               0         
+	_________________________________________________________________
+	embedding_182 (Embedding)    (None, 128, 300)          7783200   
+	_________________________________________________________________
+	spatial_dropout1d_41 (Spatia (None, 128, 300)          0         
+	_________________________________________________________________
+	bidirectional_41 (Bidirectio (None, 128, 256)          330240    
+	_________________________________________________________________
+	global_average_pooling1d_52  (None, 256)               0         
+	_________________________________________________________________
+	output_layer (Dense)         (None, 3)                 771       
+	=================================================================
+	Total params: 8,114,211
+	Trainable params: 331,011
+	Non-trainable params: 7,783,200
+	_________________________________________________________________
+
+--- Lowest val_loss of 0.44848
+x = SpatialDropout1D(0.2)(x)
+x = Bidirectional(CuDNNGRU(128, return_sequences=True))(x)
+x = GlobalMaxPooling1D()(x)
+	CV Results Summary:
+	- val_loss mean and std: 0.44848 (+/- 0.02441)
+	- val_acc mean and std: 0.82287 (+/- 0.01007)
+	- loss mean and std: 0.25363 (+/- 0.04071)
+	- acc mean and std: 0.90937 (+/- 0.01726)
+	_________________________________________________________________
+	Layer (type)                 Output Shape              Param #   
+	=================================================================
+	input_layer (InputLayer)     (None, 128)               0         
+	_________________________________________________________________
+	embedding_193 (Embedding)    (None, 128, 300)          7783200   
+	_________________________________________________________________
+	spatial_dropout1d_52 (Spatia (None, 128, 300)          0         
+	_________________________________________________________________
+	bidirectional_52 (Bidirectio (None, 128, 256)          330240    
+	_________________________________________________________________
+	global_max_pooling1d_96 (Glo (None, 256)               0         
+	_________________________________________________________________
+	output_layer (Dense)         (None, 3)                 771       
+	=================================================================
+	Total params: 8,114,211
+	Trainable params: 331,011
+	Non-trainable params: 7,783,200
+	_________________________________________________________________
+
+x = SpatialDropout1D(0.2)(x)
+x = CuDNNGRU(128, return_sequences=True)(x)
+x = GlobalMaxPooling1D()(x)
+	CV Results Summary:
+	- val_loss mean and std: 0.46313 (+/- 0.02422)
+	- val_acc mean and std: 0.81485 (+/- 0.00829)
+	- loss mean and std: 0.28524 (+/- 0.03770)
+	- acc mean and std: 0.89412 (+/- 0.01631)
+	_________________________________________________________________
+	Layer (type)                 Output Shape              Param #   
+	=================================================================
+	input_layer (InputLayer)     (None, 128)               0         
+	_________________________________________________________________
+	embedding_204 (Embedding)    (None, 128, 300)          7783200   
+	_________________________________________________________________
+	spatial_dropout1d_63 (Spatia (None, 128, 300)          0         
+	_________________________________________________________________
+	cu_dnngru_56 (CuDNNGRU)      (None, 128, 128)          165120    
+	_________________________________________________________________
+	global_max_pooling1d_107 (Gl (None, 128)               0         
+	_________________________________________________________________
+	output_layer (Dense)         (None, 3)                 387       
+	=================================================================
+	Total params: 7,948,707
+	Trainable params: 165,507
+	Non-trainable params: 7,783,200
+	_________________________________________________________________
+
+x = SpatialDropout1D(0.2)(x)
+x = Bidirectional(CuDNNLSTM(128, return_sequences=True))(x)
+x = GlobalMaxPooling1D()(x)
+	CV Results Summary:
+	- val_loss mean and std: 0.45574 (+/- 0.02642)
+	- val_acc mean and std: 0.81930 (+/- 0.00995)
+	- loss mean and std: 0.26746 (+/- 0.04264)
+	- acc mean and std: 0.90206 (+/- 0.01787)
+	_________________________________________________________________
+	Layer (type)                 Output Shape              Param #   
+	=================================================================
+	input_layer (InputLayer)     (None, 128)               0         
+	_________________________________________________________________
+	embedding_215 (Embedding)    (None, 128, 300)          7783200   
+	_________________________________________________________________
+	spatial_dropout1d_74 (Spatia (None, 128, 300)          0         
+	_________________________________________________________________
+	bidirectional_63 (Bidirectio (None, 128, 256)          440320    
+	_________________________________________________________________
+	global_max_pooling1d_118 (Gl (None, 256)               0         
+	_________________________________________________________________
+	output_layer (Dense)         (None, 3)                 771       
+	=================================================================
+	Total params: 8,224,291
+	Trainable params: 441,091
+	Non-trainable params: 7,783,200
+	_________________________________________________________________
+
+--- Runtime increased by about 5 extra minutes for the extra GRU layer and val_loss is lower by about 0.02 to 0.03
+x = SpatialDropout1D(0.2)(x)
+x = Bidirectional(CuDNNGRU(128, return_sequences=True))(x)
+x = SpatialDropout1D(0.2)(x)
+x = Bidirectional(CuDNNGRU(128, return_sequences=True))(x)
+x = GlobalMaxPooling1D()(x)
+	CV Results Summary:
+	- val_loss mean and std: 0.47671 (+/- 0.02399)
+	- val_acc mean and std: 0.81205 (+/- 0.01067)
+	- loss mean and std: 0.35346 (+/- 0.03474)
+	- acc mean and std: 0.86092 (+/- 0.01474)
+	_________________________________________________________________
+	Layer (type)                 Output Shape              Param #   
+	=================================================================
+	input_layer (InputLayer)     (None, 128)               0         
+	_________________________________________________________________
+	embedding_226 (Embedding)    (None, 128, 300)          7783200   
+	_________________________________________________________________
+	spatial_dropout1d_85 (Spatia (None, 128, 300)          0         
+	_________________________________________________________________
+	bidirectional_74 (Bidirectio (None, 128, 256)          330240    
+	_________________________________________________________________
+	spatial_dropout1d_86 (Spatia (None, 128, 256)          0         
+	_________________________________________________________________
+	bidirectional_75 (Bidirectio (None, 128, 256)          296448    
+	_________________________________________________________________
+	global_max_pooling1d_129 (Gl (None, 256)               0         
+	_________________________________________________________________
+	output_layer (Dense)         (None, 3)                 771       
+	=================================================================
+	Total params: 8,410,659
+	Trainable params: 627,459
+	Non-trainable params: 7,783,200
+	_________________________________________________________________
+
+x = SpatialDropout1D(0.2)(x)
+x = Bidirectional(CuDNNGRU(128, return_sequences=True))(x)
+x = Bidirectional(CuDNNGRU(128, return_sequences=True))(x)
+x = GlobalMaxPooling1D()(x)
+	CV Results Summary:
+	- val_loss mean and std: 0.48325 (+/- 0.02556)
+	- val_acc mean and std: 0.80602 (+/- 0.00791)
+	- loss mean and std: 0.33911 (+/- 0.04761)
+	- acc mean and std: 0.86792 (+/- 0.02171)
+	_________________________________________________________________
+	Layer (type)                 Output Shape              Param #   
+	=================================================================
+	input_layer (InputLayer)     (None, 128)               0         
+	_________________________________________________________________
+	embedding_238 (Embedding)    (None, 128, 300)          7783200   
+	_________________________________________________________________
+	spatial_dropout1d_108 (Spati (None, 128, 300)          0         
+	_________________________________________________________________
+	bidirectional_98 (Bidirectio (None, 128, 256)          330240    
+	_________________________________________________________________
+	bidirectional_99 (Bidirectio (None, 128, 256)          296448    
+	_________________________________________________________________
+	global_max_pooling1d_141 (Gl (None, 256)               0         
+	_________________________________________________________________
+	output_layer (Dense)         (None, 3)                 771       
+	=================================================================
+	Total params: 8,410,659
+	Trainable params: 627,459
+	Non-trainable params: 7,783,200
+	_________________________________________________________________
