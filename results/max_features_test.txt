@@ -73,3 +73,8 @@
     - loss mean and std: 0.69491 (+/- 0.11769)
     - acc mean and std: 0.70303 (+/- 0.06422)
   - In short, None performs the best, so using all unique tokens is the best
+
+- Important Note:
+  - Because of this Keras quirk https://github.com/keras-team/keras/issues/7551, in which `len(word_index)` always returns all tokens, regardless of the `num_words` param set (see the function in code/preprocessing/compute_word_index.py for details), I may have incorrectly tested for the best max features by propagating that quirk and not actually limiting the number of features.
+  - I later applied a fix here, but only after running random search and completing the bulk of experiments for this project: https://github.com/mrbarbasa/kaggle-spooky-author/commit/9ffed9473f96a6be0ff04c85ad6766484faede24
+  - Therefore, `vocab_size`, `embedding_matrix`, and the constructed Keras `Embedding` layer may have been incorrect during the above tests.
