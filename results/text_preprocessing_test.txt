@@ -1,0 +1,174 @@
+--- Preprocessing Settings (used in the text preprocessing tests below)
+- 1
+  lower=True,
+  remove_punc=False,
+  normalize_spelling=False,
+  stem=False,
+  lemmatize=False,
+  remove_stopwords=True
+- 2
+  - Same as above but includes stopwords
+  lower=True,
+  remove_punc=False,
+  normalize_spelling=False,
+  stem=False,
+  lemmatize=False,
+  remove_stopwords=False
+- 3
+  - Same as above but keeps the case
+  lower=False,
+  remove_punc=False,
+  normalize_spelling=False,
+  stem=False,
+  lemmatize=False,
+  remove_stopwords=False
+- 4
+  - Same as above but excludes punctuation
+  lower=False,
+  remove_punc=True,
+  normalize_spelling=False,
+  stem=False,
+  lemmatize=False,
+  remove_stopwords=False
+- 5
+  - Same as 3 but stems words using PorterStemmer
+  lower=False,
+  remove_punc=False,
+  normalize_spelling=False,
+  stem=True,
+  lemmatize=False,
+  remove_stopwords=False
+- 6
+  - Same as 3 but lemmatizes words using WordNetLemmatizer
+  lower=False,
+  remove_punc=False,
+  normalize_spelling=False,
+  stem=False,
+  lemmatize=True,
+  remove_stopwords=False
+- 7
+  - Same as 3 but converts words from British to American English spelling
+  lower=False,
+  remove_punc=False,
+  normalize_spelling=True,
+  stem=False,
+  lemmatize=False,
+  remove_stopwords=False
+
+
+--- Text Preprocessing (Tests)
+- Tested:
+  - For: 10 folds and 100 epochs with early stopping
+  - With: glove.840B.300d.txt and batch size 64
+- The logloss score details can be seen in results/kaggle_spooky_author_submission_results.csv from tests 2 through 29 (only the mean_lb_logloss is taken into account)
+
+Z - Before preprocessing (default settings)
+  - 25943 unique tokens found
+  - Tokenizer(num_words=max_features)
+    which translates to -->
+      Tokenizer(
+        num_words=None,
+        filters='!"#$%&()*+,-./:;<=>?@[\]^_`{|}~',
+          -- Thus the `filters` param filters everything in string.punctuation by default except for: \' and [\\]
+        lower=True,
+        split=' ',
+        char_level=False,
+        oov_token=None)
+
+A - Setting 1
+  - 25186 unique tokens found
+  - Tokenizer(num_words=max_features)
+  - Results: Performed way worse than Z
+  - Number of vocabulary words not found in the pre-trained GloVe embeddings: 1955 of 25186 (7.76%)
+  - Number of vocabulary words not found in the pre-trained fastText embeddings: 1888 of 25186 (7.50%)
+
+B - Setting 2
+  - 25313 unique tokens found
+  - Tokenizer(num_words=max_features)
+  - Results: GloVe performed better than A but still worse than Z, and fastText is way better than A and on par with Z
+  - GloVe not found: 1955 of 25313 (7.72%)
+  - fastText not found: 1888 of 25313 (7.46%)
+
+C - Setting 3
+  - 27710 unique tokens found
+  - Tokenizer(num_words=None, lower=False)
+  - Results: GloVe performed a lot better than B, almost on par with Z, and fastText is around the same as B
+  - GloVe not found: 1631 of 27710 (5.89%)
+  - fastText not found: 1483 of 27710 (5.35%)
+
+D - Setting 4 --> REMOVE PUNCTUATION
+  - 27839 unique tokens found
+  - Tokenizer(num_words=None, lower=False) // punctuation is excluded by default
+  - Results: The best for GloVe and fastText thus far, better than Z
+  - GloVe not found: 1504 of 27839 (5.40%)
+  - fastText not found: 1443 of 27839 (5.18%)
+
+E - Setting 3 --> KEEP PUNCTUATION
+  - 27765 unique tokens found
+  - Tokenizer(num_words=max_features, filters='', lower=False)
+  - Reason: Test the inclusion of punctuation, just to confirm D (that removing punctuation is better)
+    --> It's odd that there are less tokens (27765) keeping punctuation than excluding it (27839)
+  - Results: In fact, including punctuation produces even better results than D
+  - GloVe not found: 1633 of 27765 (5.88%)
+  - fastText not found: 1486 of 27765 (5.35%)
+
+F - Setting 4 --> REMOVE PUNCTUATION
+  - 27839 unique tokens found
+  - Tokenizer(num_words=max_features, filters=string.punctuation, lower=False)
+  - Reason: Explicitly set the `filters` param in the Keras Tokenizer, to really confirm D and E
+  - Results: Similar results to D, not better than E
+  - GloVe not found: 1504 of 27839 (5.40%)
+  - fastText not found: 1443 of 27839 (5.18%)
+
+G - Setting 5 --> Stem words using PorterStemmer
+  - 15981 unique tokens found
+  - Tokenizer(num_words=max_features, filters='', lower=False)
+  - Results: GloVe is way worse than Z, fastText is worse than Z (but not by much)
+  - GloVe not found: 5407 of 15981 (33.83%)
+  - fastText not found: 5384 of 15981 (33.69%)
+
+H - Setting 6
+  - 22575 unique tokens found
+  - Tokenizer(num_words=max_features, filters='', lower=False)
+  - Results: GloVe did not do much better than Z, but fastText did better than Z; E is still the best for both
+  - GloVe not found: 1578 of 22575 (6.99%)
+  - fastText not found: 1447 of 22575 (6.41%)
+
+I - Setting 7
+  - 27675 unique tokens found
+  - Tokenizer(num_words=max_features, filters='', lower=False)
+  - Results: GloVe did better than E (so I is the best for GloVe thus far), fastText did not perform better than Z (so E is still the best for fastText)
+  - GloVe not found: 1634 of 27675 (5.90%)
+  - fastText not found: 1487 of 27675 (5.37%)
+
+J - Setting 7
+  - 27676 unique tokens found
+  - Tokenizer(num_words=max_features, filters='', lower=False, oov_token='unkw')
+  - Results: GloVe performed worse than Z
+  - GloVe not found: 1635 of 27676 (5.91%)
+
+K - Setting 3
+  - 27766 unique tokens found
+  - Tokenizer(num_words=max_features, filters='', lower=False, oov_token='unkw')
+  - Results: fastText performed worse than Z
+  - fastText not found: 1487 of 27766 (5.36%)
+
+
+--- Best Preprocessing for GloVe: Text Preprocessing I
+process_text(x,
+             lower=False,
+             remove_punc=False,
+             normalize_spelling=True,
+             stem=False,
+             lemmatize=False,
+             remove_stopwords=False
+
+
+--- Best Preprocessing for fastText: Text Preprocessing E
+process_text(x,
+             lower=False,
+             remove_punc=False,
+             normalize_spelling=False,
+             stem=False,
+             lemmatize=False,
+             remove_stopwords=False)
