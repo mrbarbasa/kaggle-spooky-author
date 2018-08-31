@@ -3,8 +3,13 @@ My work on the [Kaggle Spooky Author Identification](https://www.kaggle.com/c/sp
 
 ## Getting Started
 
+### Project Requirements
+1. Download Anaconda or Miniconda: https://conda.io/docs/user-guide/install/download.html.
+1. The project was executed on Ubuntu 16.04 LTS powered by a GeForce GTX 1080 Ti to run random search on the neural network models. If you don't have TensorFlow installed on your system, please refer to their installation docs: https://www.tensorflow.org/install/.
+1. View the requirements for this project in the `requirements.txt` file; note that you may need different package versions based on your operating system.
+
 ### Installation Steps
-1. Assuming you have Anaconda or Miniconda installed, run `conda create --name authorid python=3.6.5`.
+1. After you have Anaconda or Miniconda installed, run `conda create --name authorid python=3.6.5`.
 1. Run `source activate authorid`.
 1. Run `pip install -r requirements.txt`.
 1. Run `KERAS_BACKEND=tensorflow python -c "from keras import backend"`.
