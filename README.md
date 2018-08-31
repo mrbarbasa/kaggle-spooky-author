@@ -1,5 +1,5 @@
 # Kaggle Spooky Author Identification
-My work on the [Kaggle Spooky Author Identification](https://www.kaggle.com/c/spooky-author-identification) dataset.
+My capstone project work on the [Kaggle Spooky Author Identification](https://www.kaggle.com/c/spooky-author-identification) dataset for [Udacity's Machine Learning Engineer Nanodegree](https://www.udacity.com/course/machine-learning-engineer-nanodegree--nd009t) program, which I was enrolled in from March to September 2018.
 
 ## Getting Started
 
